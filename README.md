@@ -11,3 +11,7 @@ The requirement has been analyzed (acceptance criteria created), planned (divide
 # Backlogs
 
 [Kitsain Backlog](https://github.com/orgs/ohtuprojektiryhma/projects/1)
+
+# Pipeline
+
+[![Pipeline](https://github.com/ohtuprojektiryhma/kitsain/actions/workflows/main.yml/badge.svg)](https://github.com/ohtuprojektiryhma/kitsain/actions/workflows/main.yml)
