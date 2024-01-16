@@ -15,3 +15,4 @@ The requirement has been analyzed (acceptance criteria created), planned (divide
 # Pipeline
 
 [![Pipeline](https://github.com/ohtuprojektiryhma/kitsain/actions/workflows/main.yml/badge.svg)](https://github.com/ohtuprojektiryhma/kitsain/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/ohtuprojektiryhma/kitsain/graph/badge.svg?token=DD0OPAD9B2)](https://codecov.io/gh/ohtuprojektiryhma/kitsain)
