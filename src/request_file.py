@@ -15,7 +15,8 @@ headers = {
 }
 
 
-response = requests.post(f'{baseUrl}/recipes/?format=api', json=data, headers=headers, auth=auth_credentials)
+response = requests.post(f'{baseUrl}/recipes/?format=api',
+                         json=data, headers=headers, auth=auth_credentials)
 
 if response.status_code == 201:
     print('Recipe created successfully!')

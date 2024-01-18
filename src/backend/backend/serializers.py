@@ -14,10 +14,12 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
+
 class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredients
         fields = ['ingredient']
+
 
 class StepsSerializer(serializers.ModelSerializer):
     class Meta:

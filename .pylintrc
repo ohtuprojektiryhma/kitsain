@@ -1,9 +1,10 @@
-[MASTER]
+[MAIN]
+ignore=src/tests
 
-ignore=tests
+[BASIC]
+include-naming-hint=True
 
 [MESSAGE CONTROL]
-
 disable=raw-checker-failed,
         bad-inline-option,
         locally-disabled,
@@ -14,10 +15,15 @@ disable=raw-checker-failed,
         use-symbolic-message-instead,
         missing-module-docstring,
         missing-function-docstring,
-        missing-class-docstring
-
-[FORMAT]
-
-[REFACTORING]
-
+        missing-class-docstring,
+        f-string-without-interpolation,
+        too-many-branches,
+        too-many-statements,
+        attribute-defined-outside-init,
+        invalid-name
 [DESIGN]
+max-attributes=16
+max-args=16
+max-locals=16
+max-line-length=110
+max-public-methods=30

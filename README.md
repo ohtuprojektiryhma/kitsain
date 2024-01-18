@@ -1,12 +1,13 @@
 # [Kitsain](https://github.com/ohtuprojektiryhma/kitsain)
 
-A backend software (or working in a library in browser cache) which has an API where food ingredients at hand are sent and the software calls OpenAI API to retrieve recipe suggestions for those ingredients.
+## About
+A backend software which has an API where food ingredients at hand are sent and the software calls OpenAI API to retrieve recipe suggestions for those ingredients.
 
-Recipe suggestions should be readable, hearable and paused in any given moment, including voice commands.
-By Uni of Helsinki students for the software engineering project course. 
+Recipe suggestions are readable, hearable and can be paused at any given moment, including voice commands.
+By University of Helsinki students for the software engineering project course. 
 
 
-Definition of Done:
+# [Definition of Done:](https://github.com/ohtuprojektiryhma/kitsain/blob/main/documentation/dod.md)
 The requirement has been analyzed (acceptance criteria created), planned (divided into technical tasks), programmed, tested with tests that bring value (with minimum coverage of 80%), testing automated (CI-pipeline), documented (with Readme file) and merged into main production branch.
 
 # Backlogs
@@ -20,3 +21,15 @@ The requirement has been analyzed (acceptance criteria created), planned (divide
 
 # Working times
 [Working time sheet](https://github.com/ohtuprojektiryhma/kitsain/wiki/Työaikakirjanpito)
+
+# License
+
+# Used frameworks and libraries
+# Documentation
+
+# Prerequisites
+
+# Configuration
+
+# Installation
+

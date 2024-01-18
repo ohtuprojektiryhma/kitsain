@@ -5,6 +5,7 @@ from backend.backend.models import Recipe
 from django.contrib.auth.models import Group, User
 from backend.backend.serializers import RecipeSerializer, UserSerializer, GroupSerializer
 
+
 class RecipeViewSet(viewsets.ModelViewSet):
     """
     A simple ViewSet for viewing and editing recipes.
@@ -25,7 +26,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
-    
+
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
