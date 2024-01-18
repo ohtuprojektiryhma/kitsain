@@ -1,5 +1,5 @@
-[MAIN]
-ignore=src/tests
+[MASTER]
+ignore=src/tests, backend
 
 [BASIC]
 include-naming-hint=True
@@ -20,7 +20,10 @@ disable=raw-checker-failed,
         too-many-branches,
         too-many-statements,
         attribute-defined-outside-init,
-        invalid-name
+        invalid-name,
+        import-error,
+        too-few-public-methods,
+        import-outside-toplevel
 [DESIGN]
 max-attributes=16
 max-args=16
