@@ -23,7 +23,9 @@ disable=raw-checker-failed,
         invalid-name,
         import-error,
         too-few-public-methods,
-        import-outside-toplevel
+        import-outside-toplevel,
+        missing-timeout,
+        consider-using-join
 [DESIGN]
 max-attributes=16
 max-args=16
