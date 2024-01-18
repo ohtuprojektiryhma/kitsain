@@ -1,1 +1,5 @@
--
+- Tests done and passed
+- CI passing
+- Code working as intended
+- Code checked by another member
+- Documentation updated
