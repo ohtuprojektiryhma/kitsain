@@ -4,11 +4,19 @@ baseUrl = "http://127.0.0.1:8000"
 
 data = {
     "name": "test",
-    "ingredients": [{"name": "cheese"}, {"name": "meat"}],
-    "steps": [{"description": "cheese on meat"}],
+    "ingredients": [{"ingredient": "cheese"}, {"ingredient": "meat"}],
+    "steps": [{"step": "1. cheese on meat"}],
 }
 
 auth_credentials = ("kitsain", "kitsain")
+
+#data = {
+#    'recipe_type': 'vegan',
+#    'ingredients': ['butter', 'milk',
+#                    'french-fries', 'tofu',
+#                    'beans', 'noodles', 'rice',
+#                    'coconut milk', 'curry paste']
+#}
 
 headers = {
     "Content-Type": "application/json",
@@ -16,8 +24,12 @@ headers = {
 
 
 response = requests.post(
-    f"{baseUrl}/recipes/?format=api", json=data, headers=headers, auth=auth_credentials
+    f"{baseUrl}/recipes/?format=json", json=data, headers=headers, auth=auth_credentials
 )
+
+#response = requests.post(
+#    f'{baseUrl}/generate/?format=json', json=data, headers=headers
+#)
 
 if response.status_code == 201:
     print("Recipe created successfully!")
