@@ -1,9 +1,15 @@
-from services.recipe_service import RecipeService
+from api_connection import API_Connection
 
-recipe_service = RecipeService()
+ingredients = []
+api_connection = API_Connection()
+
 while True:
-    ingredients = input("Input ingredients in pantry:\n")
-    print(recipe_service.get_recipe(ingredients, "vegan"))
-    stop = input("Type s to stop")
-    if stop == "s":
+    ingredient = input(
+        "Put an ingredient in pantry or generate recipe (g) or stop (s):\n"
+    )
+    if ingredient == "s":
         break
+    if ingredient == "g":
+        api_connection.request_recipe(ingredients)
+    else:
+        ingredients.append(ingredient)
