@@ -1,0 +1,34 @@
+[MASTER]
+ignore=src/tests, backend
+
+[BASIC]
+include-naming-hint=True
+
+[MESSAGE CONTROL]
+disable=raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        missing-module-docstring,
+        missing-function-docstring,
+        missing-class-docstring,
+        f-string-without-interpolation,
+        too-many-branches,
+        too-many-statements,
+        attribute-defined-outside-init,
+        invalid-name,
+        import-error,
+        too-few-public-methods,
+        import-outside-toplevel,
+        missing-timeout,
+        consider-using-join
+[DESIGN]
+max-attributes=16
+max-args=16
+max-locals=16
+max-line-length=110
+max-public-methods=30

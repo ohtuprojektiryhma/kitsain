@@ -1,30 +1,36 @@
 from django.http import JsonResponse
 from rest_framework import viewsets, permissions
-from rest_framework.parsers import JSONParser
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from backend.backend.models import Recipe
 from django.contrib.auth.models import Group, User
-from backend.backend.serializers import RecipeSerializer, UserSerializer, GroupSerializer
+from backend.backend.serializers import RecipeSerializer, UserSerializer, GroupSerializer, IngredientsSerializer, StepsSerializer
+from services.recipe_service import RecipeService
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """
-    A simple ViewSet for viewing and editing recipes.
+    API endoint that allows recipes to be viewed or edited.
     """
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return JsonResponse(serializer.data, safe=False)
+@csrf_exempt
+@require_POST
+def recipe_generator(request):
+    data = request.POST
+    print(data)
+    serializer = IngredientsSerializer(data=data['ingredients'])
 
-    def create(self, request, *args, **kwargs):
-        data = JSONParser().parse(request)
-        serializer = RecipeSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+    if serializer.is_valid():
+        ingredients = serializer.validated_data['ingredients']
+
+        recipe = RecipeService().get_recipe(ingredients, data['recipe_type'])
+
+        return recipe
+
+    return JsonResponse({'error': 'Invalid ingredients data'}, status=400)
+
     
 class UserViewSet(viewsets.ModelViewSet):
     """
