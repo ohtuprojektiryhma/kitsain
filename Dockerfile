@@ -10,3 +10,6 @@ RUN pip3 install poetry
 
 RUN poetry install
 
+COPY . .
+
+ENTRYPOINT ["poetry", "run", "python", "src/manage.py", "runserver"]
