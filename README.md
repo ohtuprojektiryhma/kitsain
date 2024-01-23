@@ -38,3 +38,6 @@ The requirement has been analyzed (acceptance criteria created), planned (divide
 
 # Installation
 
+# Retrospectives
+[23.1.](https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit)
+
