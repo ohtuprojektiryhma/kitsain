@@ -1,12 +1,18 @@
-from flask import Flask, request, Response
+from flask import Flask, request
+from services.recipe_service import RecipeService
+
+recipe_service = RecipeService()
 
 app = Flask(__name__)
 
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    print(request.json)
-    return Response("onnistui")
+    request_body = request.json
+    recipe = recipe_service.get_recipe(
+        request_body["ingredients"], request_body["recipe_type"]
+    )
+    return recipe
 
 
 if __name__ == "__main__":
