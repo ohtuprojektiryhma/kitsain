@@ -15,8 +15,9 @@ class API_Connection:
             f"{self.base_url}/generate/?format=json",
             json=data,
             headers=headers,
-            auth=self.auth_credentials,
+            #auth=self.auth_credentials,
         )
+
         if response.status_code == 201:
             print("Recipe created successfully!")
             print(response.json())  # Print the response data
