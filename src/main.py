@@ -1,8 +1,8 @@
 from api_connection import API_Connection
-from services.recipe_service import RecipeService
+#from services.recipe_service import RecipeService
 
 ingredients = []
-api_connection = API_Connection()#RecipeService()
+api_connection = API_Connection()
 
 
 while True:
