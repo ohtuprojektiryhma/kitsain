@@ -60,7 +60,7 @@ def generate_recipe_():
 @app.route("/recipes", methods=["GET"])
 def view_recipes():
     recipe_list = []
-    with open("recipes.txt") as f:
+    with open("recipes.txt", encoding="utf-8") as f:
         for jsonObj in f:
             recipeDict = json.loads(jsonObj)
             recipe_list.append(recipeDict)
