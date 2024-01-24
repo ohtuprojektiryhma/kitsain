@@ -28,7 +28,7 @@ def change():
 @app.route("/frontend", methods=["GET", "POST"])
 def generate_recipe_():
     if request.method == "GET":
-        return render_template("recipe.html")
+        return render_template("generate_recipe.html")
     if request.method == "POST":
         print(request.form)
         print("---")
@@ -59,7 +59,13 @@ def generate_recipe_():
 
 @app.route("/recipes", methods=["GET"])
 def view_recipes():
-    pass
+    recipe_list = []
+    with open("recipes.txt") as f:
+        for jsonObj in f:
+            recipeDict = json.loads(jsonObj)
+            recipe_list.append(recipeDict)
+    print(recipe_list)
+    return render_template("view_recipes.html", recipes=recipe_list)
 
 
 if __name__ == "__main__":
