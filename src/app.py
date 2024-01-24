@@ -1,8 +1,9 @@
 from flask import Flask, request, render_template
 from services.recipe_service import RecipeService
-import json
+from openai_api_connection import OpenAI_API_connection
 
-recipe_service = RecipeService()
+
+recipe_service = RecipeService(OpenAI_API_connection())
 
 app = Flask(__name__)
 
@@ -27,16 +28,17 @@ def generate_recipe_():
         print("---")
         recipe_type = request.form["recipe_type"]
         ingredient_dict = {}
-        ingredient_dict['ingredients'] = request.form.getlist("ingredient")
+        ingredient_dict["ingredients"] = request.form.getlist("ingredient")
 
         print(ingredient_dict)
         print("---")
         ingredient_dict["recipe_type"] = recipe_type
-        
+
         recipe = recipe_service.get_recipe(
             ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
         )
         return recipe
+    return None
 
 
 if __name__ == "__main__":
