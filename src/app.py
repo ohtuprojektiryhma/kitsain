@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, render_template
 from services.recipe_service import RecipeService
 from openai_api_connection import OpenAI_API_connection
@@ -34,11 +35,24 @@ def generate_recipe_():
         print("---")
         ingredient_dict["recipe_type"] = recipe_type
 
-        recipe = recipe_service.get_recipe(
-            ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
-        )
+        # recipe = recipe_service.get_recipe(
+        #    ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
+        # )
+
+        with open("frontend.json", encoding="utf-8") as f:
+            d = json.load(f)
+            recipe = json.dumps(d)
+
+        with open("recipes.txt", "a", encoding="utf-8") as recipes_file:
+            recipes_file.write(f"{recipe}\n")
+
         return recipe
     return None
+
+
+@app.route("/recipes", methods=["GET"])
+def view_recipes():
+    pass
 
 
 if __name__ == "__main__":
