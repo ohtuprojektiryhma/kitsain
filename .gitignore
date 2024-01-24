@@ -333,3 +333,6 @@ selenium-screenshot*
 log.html
 output.xml
 report.html
+
+# rest request files for testing
+*.rest

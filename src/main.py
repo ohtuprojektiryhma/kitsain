@@ -1,7 +1,9 @@
 from api_connection import API_Connection
+#from services.recipe_service import RecipeService
 
 ingredients = []
 api_connection = API_Connection()
+
 
 while True:
     ingredient = input(
@@ -10,6 +12,6 @@ while True:
     if ingredient == "s":
         break
     if ingredient == "g":
-        api_connection.request_recipe(ingredients)
+        print(api_connection.request_recipe(ingredients))#, "vegan"))
     else:
         ingredients.append(ingredient)

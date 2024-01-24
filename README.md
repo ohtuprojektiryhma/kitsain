@@ -10,6 +10,11 @@ By University of Helsinki students for the software engineering project course.
 # [Definition of Done:](https://github.com/ohtuprojektiryhma/kitsain/blob/main/documentation/dod.md)
 The requirement has been analyzed (acceptance criteria created), planned (divided into technical tasks), programmed, tested with tests that bring value (with minimum coverage of 80%), testing automated (CI-pipeline), documented (with Readme file) and merged into main production branch.
 
+# Meetings
+
+- [Agendas](https://github.com/ohtuprojektiryhma/kitsain/blob/main/documentation/customermeetings/agendas.md)
+- [Meeting notes](https://github.com/ohtuprojektiryhma/kitsain/blob/main/documentation/customermeetings/meetingnotes.md)
+
 # Backlogs
 
 [Kitsain Backlog](https://github.com/orgs/ohtuprojektiryhma/projects/1)
@@ -32,4 +37,16 @@ The requirement has been analyzed (acceptance criteria created), planned (divide
 # Configuration
 
 # Installation
+
+1. Clone repository to computer
+2. Go to root folder
+
+Run this command:
+
+.bash
+
+Add a secret key to .env file and openai api key
+
+# Retrospectives
+[23.1.](https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit)
 
