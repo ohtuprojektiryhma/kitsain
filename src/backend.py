@@ -15,6 +15,13 @@ def generate():
     return recipe
 
 
+@app.route("/change", methods=["POST"])
+def change():
+    request_body = request.json
+    recipe = recipe_service.change_recipe(request_body["change"])
+    return recipe
+
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
