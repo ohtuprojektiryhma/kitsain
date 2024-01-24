@@ -27,7 +27,7 @@ def test_get_recipe_suggestions(mock_openai):
     mock_openai_instance.chat.completions.create.return_value = mock_openai_response
     mock_openai.return_value = mock_openai_instance
 
-    api_connection = OpenaAI_API_connection()
+    api_connection = OpenAI_API_connection()
 
     # Call the method under test
     result = api_connection.get_recipe_suggestions("Water, Salt", "Soup")

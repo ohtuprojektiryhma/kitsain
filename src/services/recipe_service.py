@@ -7,3 +7,6 @@ class RecipeService:
             ingredients, recipe_type
         )
         return recipe_dict
+
+    def change_recipe(self, change: str):
+        return self.openai_connection.change_recipe(change)

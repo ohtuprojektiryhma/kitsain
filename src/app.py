@@ -18,6 +18,13 @@ def generate():
     return recipe
 
 
+@app.route("/change", methods=["POST"])
+def change():
+    request_body = request.json
+    recipe = recipe_service.change_recipe(request_body["change"])
+    return recipe
+
+
 @app.route("/frontend", methods=["GET", "POST"])
 def generate_recipe_():
     if request.method == "GET":
