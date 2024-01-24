@@ -1,9 +1,6 @@
-from openai_api_connection import OpenAI_API_connection
-
-
 class RecipeService:
-    def __init__(self):
-        self.openai_connection = OpenAI_API_connection()
+    def __init__(self, api_connection):
+        self.openai_connection = api_connection
 
     def get_recipe(self, ingredients: str, recipe_type: str):
         recipe_dict = self.openai_connection.get_recipe_suggestions(
