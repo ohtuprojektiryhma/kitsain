@@ -1,9 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch, MagicMock
-from openai_api_connection import (
-    OpenaAI_API_connection,
-)
+from openai_api_connection import OpenAI_API_connection
 
 # Example of a mock response from OpenAI
 mock_openai_response = MagicMock()
