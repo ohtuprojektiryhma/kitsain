@@ -9,7 +9,7 @@ recipe_service = RecipeService(OpenAI_API_connection())
 app = Flask(__name__)
 
 
-@app.route("/generate", methods=["GET", "POST"])
+@app.route("/generate", methods=["POST"])
 def generate():
     request_body = request.json
     recipe = recipe_service.get_recipe(
