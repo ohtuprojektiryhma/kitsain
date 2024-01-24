@@ -1,0 +1,31 @@
+
+<form action="/frontend" method="post">
+    <fieldset class="inputs-set" id="ingredient-list" class="input-field">
+        Ingredient: <input class="input-field" type="text" name="ingredient" required >
+    </fieldset>
+    Recipe type: <input type="text" name="recipe_type">
+    <input type="submit" value="Generate a recipe">
+</form>
+<button class="btn-add-input" onclick="addIngredientField()" type="">
+    Add ingredient
+  </button>
+
+  <script>
+    const myForm = document.getElementById("ingredient-list");
+    
+    function addIngredientField() {
+      // create an input field to insert
+      const newIngredientField = document.createElement("input");
+      // set input field data type to text
+      newIngredientField.type = "text";
+      // set input field name
+      newIngredientField.name = "ingredient";
+      // set required
+      newIngredientField.setAttribute("required", "");
+
+      newIngredientField.classList.add("input-field");
+
+      // insert element
+      myForm.appendChild(newIngredientField);
+    }
+  </script>
