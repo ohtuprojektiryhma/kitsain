@@ -1,4 +1,3 @@
-import pytest
 import json
 from unittest.mock import patch, MagicMock
 from openai_api_connection import OpenAI_API_connection

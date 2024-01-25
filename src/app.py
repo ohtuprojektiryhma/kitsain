@@ -26,7 +26,7 @@ def change():
 
 
 @app.route("/frontend", methods=["GET", "POST"])
-def generate_recipe_():
+def generate_recipe():
     if request.method == "GET":
         return render_template("generate_recipe.html")
     if request.method == "POST":
@@ -34,10 +34,6 @@ def generate_recipe_():
         ingredient_dict = {}
         ingredient_dict["ingredients"] = request.form.getlist("ingredient")
         ingredient_dict["recipe_type"] = recipe_type
-
-        recipe = recipe_service.get_recipe(
-            ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
-        )
 
         with open("frontend.json", encoding="utf-8") as f:
             d = json.load(f)
