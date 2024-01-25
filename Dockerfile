@@ -1,10 +1,11 @@
 FROM python:3.10
+ENV PYTHONUNBUFFERED=1
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /kitsain/
 
-WORKDIR /usr/src/app
+RUN chmod 777 /kitsain/
 
-COPY poetry.lock pyproject.toml /usr/src/app/
+COPY poetry.lock pyproject.toml /kitsain/
 
 RUN pip3 install poetry
 
@@ -14,4 +15,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["poetry", "run", "python", "src/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["poetry", "run", "python", "src/app.py", "runserver", "0.0.0.0:8000"]
