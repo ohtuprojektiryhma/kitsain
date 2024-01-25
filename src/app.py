@@ -30,26 +30,18 @@ def generate_recipe_():
     if request.method == "GET":
         return render_template("generate_recipe.html")
     if request.method == "POST":
-        print(request.form)
-        print("---")
-        print(request.form.getlist("ingredient"))
-        print("---")
         recipe_type = request.form["recipe_type"]
         ingredient_dict = {}
         ingredient_dict["ingredients"] = request.form.getlist("ingredient")
-
-        print(ingredient_dict)
-        print("---")
         ingredient_dict["recipe_type"] = recipe_type
 
-        # recipe = recipe_service.get_recipe(
-        #    ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
-        # )
+        recipe = recipe_service.get_recipe(
+            ingredient_dict["ingredients"], ingredient_dict["recipe_type"]
+        )
 
         with open("frontend.json", encoding="utf-8") as f:
             d = json.load(f)
             recipe = json.dumps(d)
-
         with open("recipes.txt", "a", encoding="utf-8") as recipes_file:
             recipes_file.write(f"{recipe}\n")
 
@@ -63,8 +55,9 @@ def view_recipes():
     with open("recipes.txt", encoding="utf-8") as f:
         for jsonObj in f:
             recipeDict = json.loads(jsonObj)
+            recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
+            print(recipeDict)
             recipe_list.append(recipeDict)
-    print(recipe_list)
     return render_template("view_recipes.html", recipes=recipe_list)
 
 

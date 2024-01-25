@@ -336,3 +336,6 @@ report.html
 
 # rest request files for testing
 *.rest
+
+# Ignoring temporary recipe save file
+recipes.txt
