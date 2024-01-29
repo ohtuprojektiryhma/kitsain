@@ -1,9 +1,10 @@
 FROM python:3.10
 ENV PYTHONUNBUFFERED=1
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
 WORKDIR /kitsain/
 
-RUN chmod 777 /kitsain/
+RUN chgrp root /kitsain/ && chmod 660 /kitsain/
 
 COPY poetry.lock pyproject.toml /kitsain/
 
