@@ -1,4 +1,4 @@
-FROM python:3.10-bookworm
+FROM python:3.10-alpine
 ENV PYTHONUNBUFFERED=1
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
