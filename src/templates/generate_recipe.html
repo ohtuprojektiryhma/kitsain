@@ -1,81 +1,82 @@
-
 <form id="recipeForm">
-    <fieldset class="inputs-set" id="ingredient-list" class="input-field">
-        Ingredient: <input class="input-field" type="text" name="ingredients" required >
-    </fieldset>
-    Recipe type: <input type="text" name="recipe_type">
-    <button type="submit">Generate a recipe</button>
+  <fieldset class="inputs-set" id="ingredient-list" class="input-field">
+    <div id="ingredient-container">
+      Ingredient: <input class="input-field" type="text" name="ingredients" required>
+    </div>
+  </fieldset>
+  Recipe type: <input type="text" name="recipe_type">
+  <button type="submit">Generate a recipe</button>
 </form>
 <button class="btn-add-input" onclick="addIngredientField()" type="">
-    Add ingredient
-  </button>
+  Add ingredient
+</button>
 
-  <script>
-    const myForm = document.getElementById("recipeForm");
-    myForm.addEventListener("submit", handleSubmit);
-    
-    function addIngredientField() {
-      // create an input field to insert
-      const newIngredientField = document.createElement("input");
-      // set input field data type to text
-      newIngredientField.type = "text";
-      // set input field name
-      newIngredientField.name = "ingredients";
-      // set required
-      newIngredientField.setAttribute("required", "");
+<script>
+  const myForm = document.getElementById("recipeForm");
+  const ingredientContainer = document.getElementById("ingredient-container");
 
-      newIngredientField.classList.add("input-field");
+  myForm.addEventListener("submit", handleSubmit);
 
-      // insert element
-      myForm.appendChild(newIngredientField);
-    }
-    function handleSubmit(event) {
-      event.preventDefault();
-      var recipeForm = document.getElementById("recipeForm");
-      
-      var formData = new FormData(recipeForm);
-      var object = {};
-      console.log(formData)
-      var object = {};
-      formData.forEach((value, key) => {
-          // Reflect.has in favor of: object.hasOwnProperty(key)
-          if(!Reflect.has(object, key)){
-              object[key] = value;
-              return;
-          }
-          if(!Array.isArray(object[key])){
-              object[key] = [object[key]];    
-          }
-          object[key].push(value);
-          console.log(object)
-      });
-      var json = JSON.stringify(object);
-      var json = JSON.stringify(object);
-      console.log(json)
-      fetch("/generate", {
-        headers: {
-            "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: json,
-      })
-        .then(response => {
-          console.log(response)
+  function addIngredientField() {
+    // create an input field to insert
+    const newIngredientField = document.createElement("input");
+    // set input field data type to text
+    newIngredientField.type = "text";
+    // set input field name
+    newIngredientField.name = "ingredients";
+    // set required
+    newIngredientField.setAttribute("required", "");
+
+    newIngredientField.classList.add("input-field");
+    // insert element into the container
+    ingredientContainer.appendChild(newIngredientField);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    var recipeForm = document.getElementById("recipeForm");
+
+    var formData = new FormData(recipeForm);
+    var object = {};
+    console.log(formData)
+    var object = {};
+    formData.forEach((value, key) => {
+      // Reflect.has in favor of: object.hasOwnProperty(key)
+      if (!Reflect.has(object, key)) {
+        object[key] = value;
+        return;
+      }
+      if (!Array.isArray(object[key])) {
+        object[key] = [object[key]];
+      }
+      object[key].push(value);
+      console.log(object)
+    });
+    var json = JSON.stringify(object);
+    console.log(json)
+    fetch("/generate", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: json,
+    })
+      .then(response => {
+        console.log(response)
         if (!response.ok) {
           throw new Error('network returns error');
         }
         return response.json();
       })
-        .then((resp) => {
-          let respdiv = document.createElement("pre");
-          respdiv.innerHTML = JSON.stringify(resp, null, 2);
-          recipeForm.replaceWith(respdiv);
-          console.log("resp from server ", resp);
-        })
-        .catch((error) => {
-          // Handle error
-          console.log("error ", error);
-        });
-    }
-    
-  </script>
+      .then((resp) => {
+        let respdiv = document.createElement("pre");
+        respdiv.innerHTML = JSON.stringify(resp, null, 2);
+        recipeForm.replaceWith(respdiv);
+        console.log("resp from server ", resp);
+      })
+      .catch((error) => {
+        // Handle error
+        console.log("error ", error);
+      });
+  }
+</script>
