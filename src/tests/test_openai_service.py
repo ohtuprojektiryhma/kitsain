@@ -1,17 +1,17 @@
 from unittest import TestCase
-from openai_api_connection import OpenAI_API_connection
+from services.openai_service import OpenAIService
 from tests.mock_openai import OpenAI
 
 
-class TestOpenAIConnection(TestCase):
+class TestOpenAIService(TestCase):
     def setUp(self):
-        # Inject mock OpenAI object into the connection class.
+        # Inject mock OpenAI object into the service.
         self.mock_client = OpenAI(api_key="mock api key")
-        self.connection = OpenAI_API_connection(self.mock_client)
+        self.service = OpenAIService(self.mock_client)
 
-    def test_get_recipe_suggestions(self):
+    def test_get_recipe(self):
         # Call the method under test
-        result = self.connection.get_recipe_suggestions("Water, Salt", "Soup")
+        result = self.service.get_recipe("Water, Salt", "Soup")
 
         # Assertions to validate the behavior
         assert result == {
