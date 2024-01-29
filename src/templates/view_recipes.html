@@ -1,27 +1,34 @@
 <style>
     .recipe-button {
         display: block;
-        margin-bottom: 10px; /* Adjust the margin as needed to separate buttons */
+        margin-bottom: 10px;
+        /* Adjust the margin as needed to separate buttons */
     }
 </style>
 
 
 {% for recipe in recipes %}
-<button class="recipe-button" onclick="showIngredientsAndSteps('{{ recipe.recipe_name }}')">{{ recipe.recipe_name  }}</button>
+<button class="recipe-button" onclick="showIngredientsAndSteps('{{ recipe.recipe_name }}')">{{ recipe.recipe_name
+    }}</button>
 <div id="{{  recipe.recipe_name  }}" style="display: none">
-{% for ingredient, amount in recipe.ingredients %}
-{{ ingredient }}: {{ amount }}, 
-{% endfor %}
-Steps:
-{% for step in recipe.instructions %}
-{{ step }}
-{% endfor %}
+    {% for ingredient, amount in recipe.ingredients %}
+    <div>
+        {{ ingredient }}: {{ amount }}
+    </div>
+    {% endfor %}
+    <br>
+    Steps:
+    {% for step in recipe.instructions %}
+    <div>
+        {{ step }}
+    </div>
+    {% endfor %}
 </div>
 {% endfor %}
 
 <script>
     function showIngredientsAndSteps(recipeName) {
-        
+
         var div = document.getElementById(recipeName);
         if (div.style.display === "none") {
             div.style.display = "block"
@@ -29,5 +36,5 @@ Steps:
             div.style.display = "none"
         }
     }
-    
+
 </script>
