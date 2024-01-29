@@ -9,10 +9,8 @@ class TestApp(TestCase):
         app.config["TESTING"] = True
         self.client = app.test_client()
 
-    # Inject mock OpenAI object into the connection class.
-    @patch(
-        "app.recipe_service.openai_connection.client", OpenAI(api_key="mock api key")
-    )
+    # Inject mock OpenAI object into the service class.
+    @patch("app.openai_service.client", OpenAI(api_key="mock api key"))
     def test_generate_recipe(self):
         data = {"ingredients": "Water, Salt", "recipe_type": "Soup"}
 

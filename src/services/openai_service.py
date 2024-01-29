@@ -14,13 +14,13 @@ GENERATION_MESSAGE = {
 }
 
 
-class OpenAI_API_connection:
+class OpenAIService:
     def __init__(self, client):
         self.client = client
         # current chat session
         self.messages = []
 
-    def send_messages_to_gpt(self):
+    def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
             model="gpt-4",
@@ -32,7 +32,7 @@ class OpenAI_API_connection:
         self.messages.append(response)
         return response
 
-    def get_recipe_suggestions(self, ingredients: str, recipe_type: str):
+    def get_recipe(self, ingredients: str, recipe_type: str):
         # init chat session
         self.messages.clear()
         self.messages.append(GENERATION_MESSAGE)
@@ -44,13 +44,13 @@ class OpenAI_API_connection:
             }
         )
 
-        response = self.send_messages_to_gpt()
+        response = self._send_messages_to_gpt()
 
         return json.loads(response.content)
 
     def change_recipe(self, change: str):
         self.messages.append({"role": "user", "content": change})
 
-        response = self.send_messages_to_gpt()
+        response = self._send_messages_to_gpt()
 
         return json.loads(response.content)
