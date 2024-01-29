@@ -1,10 +1,22 @@
+import os
 import json
 from flask import Flask, request, render_template
+from openai import OpenAI
+from dotenv import load_dotenv
 from services.recipe_service import RecipeService
 from openai_api_connection import OpenAI_API_connection
 
+dirname = os.path.dirname(__file__)
 
-recipe_service = RecipeService(OpenAI_API_connection())
+try:
+    load_dotenv(dotenv_path=os.path.join(dirname, "..", ".env"))
+except FileNotFoundError:
+    pass
+
+
+recipe_service = RecipeService(
+    OpenAI_API_connection(OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
+)
 
 app = Flask(__name__)
 

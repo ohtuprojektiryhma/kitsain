@@ -1,14 +1,4 @@
-import os
 import json
-from openai import OpenAI
-from dotenv import load_dotenv
-
-dirname = os.path.dirname(__file__)
-
-try:
-    load_dotenv(dotenv_path=os.path.join(dirname, "..", ".env"))
-except FileNotFoundError:
-    pass
 
 GENERATION_MESSAGE = {
     "role": "system",
@@ -25,8 +15,8 @@ GENERATION_MESSAGE = {
 
 
 class OpenAI_API_connection:
-    def __init__(self):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    def __init__(self, client):
+        self.client = client
         # current chat session
         self.messages = []
 
