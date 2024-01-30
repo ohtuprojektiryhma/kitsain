@@ -1,17 +1,19 @@
 FROM python:3.10-alpine
-ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY . ./
+
+RUN chmod -R 777 *
+
+RUN pip install poetry
+
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
 
-WORKDIR /kitsain
+EXPOSE 5000
 
-COPY . .
-
-RUN chgrp root /kitsain && chmod 660 /kitsain
-
-RUN pip3 install poetry
+RUN poetry config installer.max-workers 10
 
 RUN poetry install --no-root
 
-EXPOSE 8000
-
-CMD ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
