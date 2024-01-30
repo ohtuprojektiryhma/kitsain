@@ -1,0 +1,123 @@
+<style>
+  .recipe-button {
+    display: block;
+    margin-bottom: 10px;
+    /* Adjust the margin as needed to separate buttons */
+  }
+</style>
+
+<form id="recipeForm">
+  <fieldset class="inputs-set" id="ingredient-list" class="input-field">
+    <div id="ingredient-container">
+      Ingredient: <input class="input-field" type="text" name="ingredients" required>
+    </div>
+  </fieldset>
+  Recipe type: <input type="text" name="recipe_type">
+  <button type="submit">Generate a recipe</button>
+</form>
+<button class="btn-add-input" onclick="addIngredientField()" type="">
+  Add ingredient
+</button>
+<p></p>
+<p></p>
+<div>Generated recipes:</div>
+
+{% for recipe in recipes %}
+<button class="recipe-button" onclick="showIngredientsAndSteps('{{ recipe.recipe_name }}')">{{ recipe.recipe_name
+  }}</button>
+<div id="{{  recipe.recipe_name  }}" style="display: none">
+  {% for ingredient, amount in recipe.ingredients %}
+  <div>
+    {{ ingredient }}: {{ amount }}
+  </div>
+  {% endfor %}
+  <br>
+  Steps:
+  {% for step in recipe.instructions %}
+  <div>
+    {{ step }}
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<script>
+  function showIngredientsAndSteps(recipeName) {
+    var div = document.getElementById(recipeName);
+    if (div.style.display === "none") {
+      div.style.display = "block"
+    } else {
+      div.style.display = "none"
+    }
+  }
+</script>
+
+<script>
+  const myForm = document.getElementById("recipeForm");
+  const ingredientContainer = document.getElementById("ingredient-container");
+
+  myForm.addEventListener("submit", handleSubmit);
+
+  function addIngredientField() {
+    // create an input field to insert
+    const newIngredientField = document.createElement("input");
+    // set input field data type to text
+    newIngredientField.type = "text";
+    // set input field name
+    newIngredientField.name = "ingredients";
+    // set required
+    newIngredientField.setAttribute("required", "");
+
+    newIngredientField.classList.add("input-field");
+    // insert element into the container
+    ingredientContainer.appendChild(newIngredientField);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    var recipeForm = document.getElementById("recipeForm");
+
+    var formData = new FormData(recipeForm);
+    var object = {};
+    console.log(formData)
+    var object = {};
+    formData.forEach((value, key) => {
+      // Reflect.has in favor of: object.hasOwnProperty(key)
+      if (!Reflect.has(object, key)) {
+        object[key] = value;
+        return;
+      }
+      if (!Array.isArray(object[key])) {
+        object[key] = [object[key]];
+      }
+      object[key].push(value);
+      console.log(object)
+    });
+    var json = JSON.stringify(object);
+    console.log(json)
+    fetch("/generate", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: json,
+    })
+      .then(response => {
+        console.log(response)
+        if (!response.ok) {
+          throw new Error('network returns error');
+        }
+        return response.json();
+      })
+      .then((resp) => {
+        let respdiv = document.createElement("pre");
+        respdiv.innerHTML = JSON.stringify(resp, null, 2);
+        recipeForm.replaceWith(respdiv);
+        console.log("resp from server ", resp);
+      })
+      .catch((error) => {
+        // Handle error
+        console.log("error ", error);
+      });
+  }
+</script>

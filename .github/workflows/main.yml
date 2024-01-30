@@ -23,6 +23,8 @@ jobs:
       - name: Analysing the code with pylint
         run: poetry run pylint src
       - name: Run tests
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: poetry run coverage run --branch -m pytest
       - name: Generate coverage report
         run: poetry run coverage xml
