@@ -37,7 +37,7 @@ class TestApp(TestCase):
         response = self.client.post("/generate", json=data)
 
         self.assertEqual(response.status_code, 200)
-        
+
         # Ask for a change
         data = {"change": "Add pepper"}
 

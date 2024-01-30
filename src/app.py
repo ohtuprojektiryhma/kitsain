@@ -3,6 +3,7 @@ import json
 from flask import Flask, request, render_template
 from openai import OpenAI
 from dotenv import load_dotenv
+# import db
 from services.openai_service import OpenAIService
 
 dirname = os.path.dirname(__file__)
@@ -41,7 +42,8 @@ def generate_recipe():
         with open("recipes.txt", encoding="utf-8") as f:
             for jsonObj in f:
                 recipeDict = json.loads(jsonObj)
-                recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
+                recipeDict["ingredients"] = list(
+                    recipeDict["ingredients"].items())
                 recipe_list.append(recipeDict)
         return render_template("generate_recipe.html", recipes=recipe_list)
     if request.method == "POST":
@@ -49,6 +51,8 @@ def generate_recipe():
         ingredient_dict = {}
         ingredient_dict["ingredients"] = request.form.getlist("ingredient")
         ingredient_dict["recipe_type"] = recipe_type
+        # for ingredient in ingredient_dict["ingredients"]:
+        #     db.insert_ingredient(ingredient)
 
         with open("frontend.json", encoding="utf-8") as f:
             d = json.load(f)
