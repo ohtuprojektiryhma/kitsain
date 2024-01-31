@@ -3,42 +3,79 @@
     display: block;
     margin-bottom: 10px;
   }
+
+  .pantry {
+    float: left;
+    position: relative;
+    width: 450px;
+  }
+
+  .kitsain-logo {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+
+  .right-side {
+    position: relative;
+    left: 500px;
+    width: 770px;
+  }
 </style>
 
-<form id="recipeForm">
-  <fieldset class="inputs-set" id="ingredient-list" class="input-field">
-    <div id="ingredient-container">
-      Ingredient: <input class="input-field" type="text" name="ingredients" required>
-    </div>
-  </fieldset>
-  Recipe type: <input type="text" name="recipe_type">
-  <button type="submit">Generate a recipe</button>
-</form>
-<button class="btn-add-input" onclick="addIngredientField()" type="">
-  Add ingredient
-</button>
-<p></p>
-<p></p>
-<div>Generated recipes:</div>
+<div class="kitsain-logo">
+  Kitsain
+</div>
 
-{% for recipe in recipes %}
-<button class="recipe-button" onclick="showIngredientsAndSteps('{{ recipe.recipe_name }}')">{{ recipe.recipe_name
-  }}</button>
-<div id="{{  recipe.recipe_name  }}" style="display: none">
-  {% for ingredient, amount in recipe.ingredients %}
-  <div>
-    {{ ingredient }}: {{ amount }}
-  </div>
-  {% endfor %}
-  <br>
-  Steps:
-  {% for step in recipe.instructions %}
-  <div>
-    {{ step }}
+<div class="right-side">
+  <form id="recipeForm">
+    <fieldset class="inputs-set" id="ingredient-list" class="input-field">
+      <div id="ingredient-container">
+        Ingredient: <input class="input-field" type="text" name="ingredients" required>
+      </div>
+    </fieldset>
+    Recipe type: <input type="text" name="recipe_type">
+    <button type="submit">Generate a recipe</button>
+  </form>
+  <button class="btn-add-input" onclick="addIngredientField()" type="">
+    Add ingredient
+  </button>
+  <p></p>
+  <p></p>
+  <div>Generated recipes:</div>
+
+  {% for recipe in recipes %}
+  <button class="recipe-button" onclick="showIngredientsAndSteps('{{ recipe.recipe_name }}')">{{ recipe.recipe_name
+    }}</button>
+  <div id="{{  recipe.recipe_name  }}" style="display: none">
+    {% for ingredient, amount in recipe.ingredients %}
+    <div>
+      {{ ingredient }}: {{ amount }}
+    </div>
+    {% endfor %}
+    <br>
+    Steps:
+    {% for step in recipe.instructions %}
+    <div>
+      {{ step }}
+    </div>
+    {% endfor %}
   </div>
   {% endfor %}
 </div>
-{% endfor %}
+
+<div class="pantry">
+  Pantry:
+  {% for ingredient in pantry %}
+  <div>
+    <b>{{ ingredient.name }}</b> ({{ ingredient.barcode }})
+    <p>
+      Amount: {{ ingredient.amount }}
+    </p>
+  </div>
+  <hr>
+  {% endfor %}
+</div>
+
 
 <script>
   function showIngredientsAndSteps(recipeName) {
@@ -104,19 +141,19 @@
         return response.json();
       })
       .then(resp => {
-          let jsonResponse = JSON.stringify(resp);
-          return fetch("/frontend", {
-            headers: {
+        let jsonResponse = JSON.stringify(resp);
+        return fetch("/frontend", {
+          headers: {
             "Content-Type": "application/json",
           },
           method: "POST",
           body: jsonResponse,
-          })
-      
+        })
+
       })
       .catch((error) => {
         // Handle error
         console.log("error ", error);
       })
-    }
+  }
 </script>
