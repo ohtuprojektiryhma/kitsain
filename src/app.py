@@ -19,6 +19,19 @@ openai_service = OpenAIService(OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
 
 app = Flask(__name__)
 
+"""Mock recipe generation route for returning a mock recipe
+
+Returns:
+    mock_recipe: recipe(json object)
+"""
+
+
+@app.route("/mock_generate", methods=["POST"])
+def mock_generate():
+    with open("mock_recipe.json", encoding="utf-8") as file:
+        mock_recipe = json.load(file)
+    return mock_recipe
+
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -49,15 +62,9 @@ def generate_recipe():
     if request.method == "POST":
         recipe = request.get_json()
         recipe = json.dumps(recipe)
-        """        recipe_type = request.form["recipe_type"]
-        ingredient_dict = {}
-        ingredient_dict["ingredients"] = request.form.getlist("ingredient")
-        ingredient_dict["recipe_type"] = recipe_type"""
         # for ingredient in ingredient_dict["ingredients"]:
         #     db.insert_ingredient(ingredient)
 
-        # with open("frontend.json", encoding="utf-8") as f:
-        # d = json.load(f)
         # recipe = json.dumps(d)
         with open("recipes.txt", "a", encoding="utf-8") as recipes_file:
             recipes_file.write(f"{recipe}\n")

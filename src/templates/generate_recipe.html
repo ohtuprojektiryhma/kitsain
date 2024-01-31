@@ -90,7 +90,7 @@
       object[key].push(value);
     });
     var json = JSON.stringify(object);
-    fetch("/generate", {
+    fetch("/mock_generate", {
       headers: {
         "Content-Type": "application/json",
       },
