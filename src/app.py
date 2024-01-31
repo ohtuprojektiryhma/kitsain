@@ -47,10 +47,8 @@ def generate_recipe():
                 recipe_list.append(recipeDict)
         return render_template("generate_recipe.html", recipes=recipe_list)
     if request.method == "POST":
-        print(request)
-        print(request.content_type)
-        recipe = request.json
-        print(recipe)
+        recipe = request.get_json()
+        recipe = json.dumps(recipe)
         """        recipe_type = request.form["recipe_type"]
         ingredient_dict = {}
         ingredient_dict["ingredients"] = request.form.getlist("ingredient")

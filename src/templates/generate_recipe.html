@@ -88,10 +88,8 @@
         object[key] = [object[key]];
       }
       object[key].push(value);
-      console.log(object)
     });
     var json = JSON.stringify(object);
-    console.log(json)
     fetch("/generate", {
       headers: {
         "Content-Type": "application/json",
@@ -99,16 +97,14 @@
       method: "POST",
       body: json,
     })
-    .then(response => {
-        console.log(response)
+      .then(response => {
         if (!response.ok) {
           throw new Error('network returns error');
         }
         return response.json();
       })
       .then(resp => {
-          let jsonResponse = JSON.stringify(resp, null, 2);
-          console.log(resp)
+          let jsonResponse = JSON.stringify(resp);
           return fetch("/frontend", {
             headers: {
             "Content-Type": "application/json",
