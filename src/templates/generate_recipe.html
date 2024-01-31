@@ -41,6 +41,7 @@
   </button>
   <p></p>
   <p></p>
+  <hr>
   <div>Generated recipes:</div>
 
   {% for recipe in recipes %}
@@ -68,6 +69,18 @@
   {% for ingredient in pantry %}
   <div>
     <b>{{ ingredient.name }}</b> ({{ ingredient.barcode }})
+    <input type="checkbox" id="{{ ingredient.name }}" name="{{ ingredient.name }}" value="{{ ingredient.name }}">
+    <script>
+      var checkbox = document.querySelector("input[name=checkbox]");
+
+      checkbox.addEventListener('change', function () {
+        if (this.checked) {
+          console.log("Checkbox is checked..");
+        } else {
+          console.log("Checkbox is not checked..");
+        }
+      });
+    </script>
     <p>
       Amount: {{ ingredient.amount }}
     </p>
