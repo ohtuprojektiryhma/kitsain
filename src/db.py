@@ -25,6 +25,6 @@ def delete_ingredient(ingredient_name):
 
 def insert_recipe(recipe):
     query = text("INSERT INTO recipes (recipe_json) VALUES (:recipe)")
-
-    db.session.execute(query, {"recipe_json": recipe})
+    print(recipe)
+    db.session.execute(query, {"recipe": recipe})
     db.session.commit()
