@@ -76,7 +76,7 @@ def generate_recipe():
     if request.method == "POST":
         recipe = request.get_json()
         recipe_string = json.dumps(recipe)
-        db.insert_recipe(recipe)
+        db.insert_recipe(recipe_string)
 
         with open("recipes.txt", "a", encoding="utf-8") as recipes_file:
             recipes_file.write(f"{recipe_string}\n")
