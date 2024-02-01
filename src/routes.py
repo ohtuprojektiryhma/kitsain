@@ -1,10 +1,10 @@
-from app import app
 import os
 import json
-from entities import entities
-from flask import Flask, request, render_template
+from flask import request, render_template
 from openai import OpenAI
 from dotenv import load_dotenv
+from app import app
+from entities import entities
 
 import db
 from services.openai_service import OpenAIService

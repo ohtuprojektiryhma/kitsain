@@ -1,7 +1,7 @@
-from app import app
+from os import getenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from os import getenv
+from app import app
 
 DEFAULT_ENV_URL = "postgresql+psycopg2://"
 
