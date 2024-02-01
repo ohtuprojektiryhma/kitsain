@@ -1,18 +1,11 @@
-import os
+from os import getenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from app import app
-from dotenv import load_dotenv
 
 DEFAULT_ENV_URL = "postgresql+psycopg2://"
 
-dirname = os.path.dirname(__file__)
-
-try:
-    load_dotenv(dotenv_path=os.path.join(dirname, "..", ".env"))
-except FileNotFoundError:
-    pass
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 
