@@ -1,8 +1,9 @@
 import json
 from flask import request, render_template
 from app import app, openai_service
-from entities import entities
 import db
+
+# from entities import entities
 
 
 @app.route("/mock_generate", methods=["POST"])
@@ -13,14 +14,19 @@ def mock_generate():
 
 
 def create_pantry():
-    ingredient1 = entities.Ingredient("ground beef", "400 g", "6407840041172")
-    ingredient2 = entities.Ingredient("macaroni", "400 g", "6417700050725")
+    # ingredient1 = entities.Ingredient("ground beef", "400 g", "6407840041172")
+    # ingredient2 = entities.Ingredient("macaroni", "400 g", "6417700050725")
 
-    pantry = entities.Pantry()
-    pantry.add_ingredient(ingredient1)
-    pantry.add_ingredient(ingredient2)
+    # pantry = entities.Pantry()
+    # pantry.add_ingredient(ingredient1)
+    # pantry.add_ingredient(ingredient2)
+    ingredients = db.get_all_pantry_ingredients()
+    if not ingredients:
+        db.insert_ingredient("ground beef", "400g", "6407840041172")
+        db.insert_ingredient("macaroni", "400g", "6417700050725")
+        ingredients = db.get_all_pantry_ingredients()
 
-    return pantry.ingredients
+    return ingredients
 
 
 @app.route("/generate", methods=["POST"])
