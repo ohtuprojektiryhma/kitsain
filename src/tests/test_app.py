@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 from app import app
+import routes
 from tests.mock_openai import OpenAI
 
 

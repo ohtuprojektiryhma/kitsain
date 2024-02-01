@@ -1,29 +1,8 @@
-import os
 import json
 from flask import request, render_template
-from openai import OpenAI
-from dotenv import load_dotenv
-from app import app
+from app import app, openai_service
 from entities import entities
-
 import db
-from services.openai_service import OpenAIService
-
-dirname = os.path.dirname(__file__)
-
-try:
-    load_dotenv(dotenv_path=os.path.join(dirname, "..", ".env"))
-except FileNotFoundError:
-    pass
-
-
-openai_service = OpenAIService(OpenAI(api_key=os.getenv("OPENAI_API_KEY")))
-
-"""Mock recipe generation route for returning a mock recipe
-
-Returns:
-    mock_recipe: recipe(json object)
-"""
 
 
 @app.route("/mock_generate", methods=["POST"])
