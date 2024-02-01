@@ -7,7 +7,7 @@
   .pantry {
     float: left;
     position: relative;
-    width: 450px;
+    width: 25%;
   }
 
   .kitsain-logo {
@@ -18,7 +18,11 @@
   .right-side {
     position: relative;
     float: right;
-    width: 770px;
+    width: 50%;
+  }
+
+  .btn-change-latest {
+    color: green;
   }
 </style>
 
@@ -42,6 +46,10 @@
   <p></p>
   <p></p>
   <hr>
+  <button class="btn-change-latest" type="">
+    Change latest recipe
+  </button>
+  <p></p>
   <div>Generated recipes:</div>
 
   {% for recipe in recipes %}
