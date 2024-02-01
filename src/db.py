@@ -6,18 +6,13 @@ from app import app
 
 DEFAULT_ENV_URL = "postgresql+psycopg2://"
 dirname = os.path.dirname(__file__)
-found = True
 
 try:
     load_dotenv(dotenv_path=os.path.join(dirname, "..", ".env"))
 except FileNotFoundError:
-    found = False
+    pass
 
-if found:
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = DEFAULT_ENV_URL
-
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 
