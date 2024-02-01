@@ -7,7 +7,6 @@ from tests.mock_openai import OpenAI
 class TestApp(TestCase):
     def setUp(self):
         app.config["TESTING"] = True
-        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://"
         self.client = app.test_client()
 
     # Inject mock OpenAI object into the service class.
