@@ -339,3 +339,6 @@ report.html
 
 # Ignoring temporary recipe save file
 recipes.txt
+
+# Ignoring temporary pantry save file
+pantry.txt

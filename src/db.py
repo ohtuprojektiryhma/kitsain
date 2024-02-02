@@ -53,7 +53,7 @@ def test_database_connection():
         connection = True
         print("connection to database found")
         print("using database for saving")
-    except:
+    except:  # pylint: disable=W0702
         print("connection to database not found")
         print("using text files for saving")
     return connection

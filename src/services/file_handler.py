@@ -4,18 +4,18 @@ import json
 
 class FileHandler:
     def read_from_csv(self, filename):
-        list = []
-        with open(filename, newline="") as csvfile:
+        rows = []
+        with open(filename, newline="", encoding="utf-8") as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=",", quotechar="|")
             for row in csv_reader:
-                list.append(row)
-        return list
+                rows.append(row)
+        return rows
 
-    def write_to_csv(self, filename, input_list):
-        with open(filename, "w", newline="") as csvfile:
+    def write_to_csv(self, filename, line_list):
+        with open(filename, "w", newline="", encoding="utf-8") as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=",", quotechar="|")
-            for input in input_list:
-                csv_writer.writerow(input)
+            for line in line_list:
+                csv_writer.writerow(line)
 
     def write_to_txt(self, filename, string):
         with open(filename, "a", encoding="utf-8") as file:

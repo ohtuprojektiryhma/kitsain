@@ -51,13 +51,7 @@ def generate_recipe():
 
 @app.route("/recipes", methods=["GET"])
 def view_recipes():
-    recipe_list = []
-    with open("recipes.txt", encoding="utf-8") as f:
-        for jsonObj in f:
-            recipeDict = json.loads(jsonObj)
-            recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
-            print(recipeDict)
-            recipe_list.append(recipeDict)
+    recipe_list = file_handler.read_json_objects_recipe_txt()
     return render_template("view_recipes.html", recipes=recipe_list)
 
 
