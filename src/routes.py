@@ -2,8 +2,11 @@ import json
 from flask import request, render_template
 from app import app, openai_service
 import db
+from services.pantry_service import PantryService
+from services.file_handler import FileHandler
 
-# from entities import entities
+file_handler = FileHandler()
+pantry_service = PantryService()
 
 
 @app.route("/mock_generate", methods=["POST"])
@@ -11,22 +14,6 @@ def mock_generate():
     with open("mock_recipe.json", encoding="utf-8") as file:
         mock_recipe = json.load(file)
     return mock_recipe
-
-
-def create_pantry():
-    # ingredient1 = entities.Ingredient("ground beef", "400 g", "6407840041172")
-    # ingredient2 = entities.Ingredient("macaroni", "400 g", "6417700050725")
-
-    # pantry = entities.Pantry()
-    # pantry.add_ingredient(ingredient1)
-    # pantry.add_ingredient(ingredient2)
-    ingredients = db.get_all_pantry_ingredients()
-    if not ingredients:
-        db.insert_ingredient("ground beef", "400g", "6407840041172")
-        db.insert_ingredient("macaroni", "400g", "6417700050725")
-        ingredients = db.get_all_pantry_ingredients()
-
-    return ingredients
 
 
 @app.route("/generate", methods=["POST"])
@@ -47,25 +34,17 @@ def change():
 
 @app.route("/frontend", methods=["GET", "POST"])
 def generate_recipe():
-    pantry = create_pantry()
     if request.method == "GET":
-        recipe_list = []
-        with open("recipes.txt", encoding="utf-8") as f:
-            for jsonObj in f:
-                recipeDict = json.loads(jsonObj)
-                recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
-                recipe_list.append(recipeDict)
+        pantry = pantry_service.get_pantry()
+        recipe_list = file_handler.read_json_objects_recipe_txt()
         return render_template(
             "generate_recipe.html", recipes=recipe_list, pantry=pantry
         )
     if request.method == "POST":
         recipe = request.get_json()
         recipe_string = json.dumps(recipe)
+        file_handler.write_to_txt("recipes.txt", recipe_string)
         db.insert_recipe(recipe_string)
-
-        with open("recipes.txt", "a", encoding="utf-8") as recipes_file:
-            recipes_file.write(f"{recipe_string}\n")
-
         return request.json
     return None
 

@@ -76,7 +76,7 @@
   Pantry:
   {% for ingredient in pantry %}
   <div>
-    <b>{{ ingredient[0] }}</b> ({{ ingredient[2] }})
+    <b>{{ ingredient.name }}</b> ({{ ingredient.barcode }})
     <input type="checkbox" id="{{ ingredient.name }}" name="{{ ingredient.name }}" value="{{ ingredient.name }}">
     <script>
       var checkbox = document.querySelector("input[name=checkbox]");
@@ -90,7 +90,7 @@
       });
     </script>
     <p>
-      Amount: {{ ingredient[1] }}
+      Amount: {{ ingredient.amount }}
     </p>
   </div>
   <hr>

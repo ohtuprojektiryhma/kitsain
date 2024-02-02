@@ -43,3 +43,17 @@ def get_all_pantry_ingredients():
     ingredients = db.session.execute(query).fetchall()
 
     return ingredients
+
+
+def test_database_connection():
+    connection = False
+    try:
+        query = text("SELECT 1")
+        db.session.execute(query)
+        connection = True
+        print("connection to database found")
+        print("using database for saving")
+    except:
+        print("connection to database not found")
+        print("using text files for saving")
+    return connection
