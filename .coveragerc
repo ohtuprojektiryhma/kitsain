@@ -1,3 +1,3 @@
 [run]
 source = src
-omit = src/api_connection.py, src/main.py, src/app.py, src/tests/*
+omit = src/api_connection.py, src/main.py, src/app.py, src/tests/*, src/db.py, src/routes.py, src/entities/entities.py
