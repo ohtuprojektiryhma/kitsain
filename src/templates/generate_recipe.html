@@ -77,9 +77,9 @@
   {% for ingredient in pantry %}
   <div>
     <b>{{ ingredient.name }}</b> ({{ ingredient.barcode }})
-    <input type="checkbox" id="{{ ingredient.name }}" name="{{ ingredient.name }}" value="{{ ingredient.name }}">
+    <input type="checkbox" id="checkbox_{{ ingredient.name }}" name="ingredientCheckbox" value="{{ ingredient.name }}">
     <script>
-      var checkbox = document.querySelector("input[name=checkbox]");
+      var checkbox = document.querySelector(`#checkbox_{{ ingredient.name }}`);
 
       checkbox.addEventListener('change', function () {
         if (this.checked) {
