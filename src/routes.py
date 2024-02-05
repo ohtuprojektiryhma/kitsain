@@ -1,12 +1,14 @@
 import json
 from flask import request, render_template
 from app import app, openai_service
-import db
+from repositories.pantry_repository import PantryRepository
 from services.pantry_service import PantryService
 from services.file_handler import FileHandler
+from db_connection import db
 
 file_handler = FileHandler()
-pantry_service = PantryService()
+pantry_repository = PantryRepository(db)
+pantry_service = PantryService(pantry_repository)
 
 
 @app.route("/mock_generate", methods=["POST"])
@@ -44,7 +46,7 @@ def generate_recipe():
         recipe = request.get_json()
         recipe_string = json.dumps(recipe)
         file_handler.write_to_txt("recipes.txt", recipe_string)
-        db.insert_recipe(recipe_string)
+        pantry_repository.insert_recipe(recipe_string)
         return request.json
     return None
 

@@ -1,10 +1,10 @@
-import db
 from entities import entities
 from services.file_handler import FileHandler
 
 
 class PantryService:
-    def __init__(self):
+    def __init__(self, pantry_repository):
+        self.pantry_repository = pantry_repository
         self.file_handler = FileHandler()
         self.mock_ingredients = [
             ["ground beef", "400g", "6407840041172"],
@@ -12,7 +12,7 @@ class PantryService:
         ]
 
     def get_pantry(self):
-        use_db = db.test_database_connection()
+        use_db = self.pantry_repository.test_database_connection()
 
         if use_db:
             ingredients = self.get_ingredients_from_db()
@@ -33,9 +33,13 @@ class PantryService:
         return ingredients
 
     def get_ingredients_from_db(self):
-        ingredients = db.get_all_pantry_ingredients()
+        ingredients = self.pantry_repository.get_all_pantry_ingredients()
         if not ingredients:
-            db.insert_ingredient("ground beef", "400g", "6407840041172")
-            db.insert_ingredient("macaroni", "400g", "6417700050725")
-            ingredients = db.get_all_pantry_ingredients()
+            self.pantry_repository.insert_ingredient(
+                "ground beef", "400g", "6407840041172"
+            )
+            self.pantry_repository.insert_ingredient(
+                "macaroni", "400g", "6417700050725"
+            )
+            ingredients = self.pantry_repository.get_all_pantry_ingredients()
         return ingredients

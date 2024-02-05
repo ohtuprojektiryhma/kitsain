@@ -1,5 +1,5 @@
 [MASTER]
-ignore=src/tests, backend
+ignore=src/tests
 
 [BASIC]
 include-naming-hint=True

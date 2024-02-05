@@ -1,12 +1,22 @@
+from os import getenv, path
+from dotenv import load_dotenv
 from unittest import TestCase
 from unittest.mock import patch
 from app import app
 from tests.mock_openai import OpenAI
 
+dirname = path.dirname(__file__)
+
+try:
+    load_dotenv(dotenv_path=path.join(dirname, "../..", ".env"))
+except FileNotFoundError:
+    pass
+
 
 class TestApp(TestCase):
     def setUp(self):
         app.config["TESTING"] = True
+        app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
         self.client = app.test_client()
 
     # Inject mock OpenAI object into the service class.
