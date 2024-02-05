@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+Acceptance criteria: 
+
 ## Tasks
 
 - [ ] Task 1 @Assignee1
