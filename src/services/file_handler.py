@@ -5,14 +5,15 @@ import json
 class FileHandler:
     def read_from_csv(self, filename):
         rows = []
-        with open(filename, newline="", encoding="utf-8") as csvfile:
+        with open(filename, "a+", newline="", encoding="utf-8") as csvfile:
+            csvfile.seek(0)
             csv_reader = csv.reader(csvfile, delimiter=",", quotechar="|")
             for row in csv_reader:
                 rows.append(row)
         return rows
 
     def write_to_csv(self, filename, line_list):
-        with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+        with open(filename, "w+", newline="", encoding="utf-8") as csvfile:
             csv_writer = csv.writer(csvfile, delimiter=",", quotechar="|")
             for line in line_list:
                 csv_writer.writerow(line)
@@ -23,7 +24,8 @@ class FileHandler:
 
     def read_json_objects_recipe_txt(self):
         recipe_list = []
-        with open("recipes.txt", encoding="utf-8") as f:
+        with open("recipes.txt", "a+", encoding="utf-8") as f:
+            f.seek(0)
             for jsonObj in f:
                 recipeDict = json.loads(jsonObj)
                 recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
