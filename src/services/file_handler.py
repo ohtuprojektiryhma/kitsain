@@ -31,3 +31,8 @@ class FileHandler:
                 recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
                 recipe_list.append(recipeDict)
         return recipe_list
+
+    def read_json_objects_mock_recipe(self):
+        with open("mock_recipe.json", encoding="utf-8") as file:
+            mock_recipe = json.load(file)
+        return mock_recipe

@@ -13,8 +13,7 @@ pantry_service = PantryService(pantry_repository)
 
 @app.route("/mock_generate", methods=["POST"])
 def mock_generate():
-    with open("mock_recipe.json", encoding="utf-8") as file:
-        mock_recipe = json.load(file)
+    mock_recipe = file_handler.read_json_objects_mock_recipe()
     return mock_recipe
 
 
