@@ -49,8 +49,11 @@ class OpenAIService:
         return json.loads(response.content)
 
     def change_recipe(self, change: str):
+        # print(change)
         self.messages.append({"role": "user", "content": change})
 
         response = self._send_messages_to_gpt()
+
+        print(self.messages)
 
         return json.loads(response.content)
