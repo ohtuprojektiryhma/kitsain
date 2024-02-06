@@ -47,8 +47,7 @@ def generate_recipe():
         print(recipe_string)
         if pantry_repository.test_database_connection():
             pantry_repository.insert_recipe(recipe_string)
-        else:
-            file_handler.write_to_txt("recipes.txt", recipe_string)
+        file_handler.write_to_txt("recipes.txt", recipe_string)
 
         return request.json
     return None

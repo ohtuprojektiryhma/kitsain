@@ -32,6 +32,31 @@
   .btn-rm-input {
     color: red;
   }
+
+  #loading {
+    width: 2rem;
+    height: 2rem;
+    border: 5px solid #f3f3f3;
+    border-top: 6px solid #9c41f2;
+    border-radius: 100%;
+    margin: auto;
+    display: none;
+    animation: spin 1s infinite linear;
+  }
+
+  #loading.display {
+    visibility: visible;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
 
 <div class="kitsain-logo">
@@ -47,6 +72,7 @@
     </fieldset>
     Recipe type: <input type="text" name="recipe_type">
     <button type="submit">Generate a recipe</button>
+    <div id="loading"></div>
   </form>
   <button class="btn-add-input" onclick="addIngredientField()" type="">
     Add ingredient
@@ -166,6 +192,8 @@
   }
 
   function handleSubmit(event) {
+    var loading = document.getElementById("loading")
+    loading.style.display = "block";
     event.preventDefault();
     var recipeForm = document.getElementById("recipeForm");
 
@@ -199,6 +227,7 @@
       .then(resp => {
         let jsonResponse = JSON.stringify(resp);
         console.log(jsonResponse);
+        loading.style.display = "none";
         return fetch("/frontend", {
           headers: {
             "Content-Type": "application/json",
@@ -212,7 +241,9 @@
         // Handle error
         console.log("error ", error);
       })
+
   }
+
 
   function changeRecipe() {
     event.preventDefault();
