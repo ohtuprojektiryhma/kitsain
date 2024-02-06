@@ -7,8 +7,10 @@ class PantryService:
         self.pantry_repository = pantry_repository
         self.file_handler = FileHandler()
         self.mock_ingredients = [
-            ["ground beef", "400g", "6407840041172"],
+            ["tofu", "400g", "6407840041172"],
             ["macaroni", "400g", "6417700050725"],
+            ["beans", "300g", "0036800064546"],
+            ["crushed tomatoes", "400g", "9300601173846"],
         ]
 
     def get_pantry(self):
