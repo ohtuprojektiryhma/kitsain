@@ -57,7 +57,7 @@
   <p></p>
   <p></p>
   <hr>
-  <button class="btn-change-latest" type="">
+  <button class="btn-change-latest" onclick="changeRecipe()" type="submit">
     Change latest recipe
   </button>
   <p>
@@ -184,6 +184,43 @@
     });
     var json = JSON.stringify(object);
     fetch("/generate", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: json,
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('network returns error');
+        }
+        return response.json();
+      })
+      .then(resp => {
+        let jsonResponse = JSON.stringify(resp);
+        console.log(jsonResponse);
+        return fetch("/frontend", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: jsonResponse,
+        })
+
+      })
+      .catch((error) => {
+        // Handle error
+        console.log("error ", error);
+      })
+  }
+
+  function changeRecipe() {
+    event.preventDefault();
+    var recipe_changes = document.getElementById("recipe_change").value;
+    var object = {};
+    object["change"] = recipe_changes;
+    var json = JSON.stringify(object)
+    fetch("/change", {
       headers: {
         "Content-Type": "application/json",
       },

@@ -44,6 +44,7 @@ def generate_recipe():
     if request.method == "POST":
         recipe = request.get_json()
         recipe_string = json.dumps(recipe)
+        print(recipe_string)
         if pantry_repository.test_database_connection():
             pantry_repository.insert_recipe(recipe_string)
         else:
