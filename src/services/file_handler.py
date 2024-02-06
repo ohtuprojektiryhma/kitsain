@@ -26,12 +26,12 @@ class FileHandler:
         with open(filename, "r+") as file:
             lines = file.readlines()
             if lines:
-                lines[-1] = updated_recipe + "\n"  # Replace the last line
-                file.seek(0)  # Go back to the start of the file
-                file.writelines(lines)  # Write the modified lines
-                file.truncate()  # Truncate the file to the new size
+                lines[-1] = updated_recipe + "\n"
+                file.seek(0)
+                file.writelines(lines)
+                file.truncate()
             else:
-                file.write(updated_recipe + "\n")  # Write the line if file is empty
+                file.write(updated_recipe + "\n")
 
     def read_json_objects_recipe_txt(self):
         recipe_list = []
