@@ -4,9 +4,8 @@ WORKDIR /app
 
 COPY . ./
 
-RUN chgrp root * && chmod 660 *
-
-RUN chmod -R 777 *
+RUN chgrp -R 0 /app && \
+    chmod -R g=u /app
 
 RUN pip install poetry
 
