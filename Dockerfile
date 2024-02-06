@@ -6,6 +6,8 @@ COPY . ./
 
 RUN chmod -R 777 *
 
+RUN chgrp root app/src && chmod 660 app/src
+
 RUN pip install poetry
 
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true
