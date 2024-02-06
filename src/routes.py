@@ -33,26 +33,25 @@ def change():
     return recipe
 
 
-@app.route("/frontend", methods=["GET", "POST"])
-def generate_recipe():
-    if request.method == "GET":
-        pantry = pantry_service.get_pantry()
-        recipe_list = file_handler.read_json_objects_recipe_txt()
-        return render_template(
-            "generate_recipe.html", recipes=recipe_list, pantry=pantry
-        )
-    if request.method == "POST":
-        recipe = request.get_json()
-        recipe_string = json.dumps(recipe)
-        print(recipe_string)
-        if pantry_repository.test_database_connection():
-            pantry_repository.insert_recipe(recipe_string)
-        file_handler.write_to_txt("recipes.txt", recipe_string)
-
-        return request.json
-    return None
+@app.route("/frontend", methods=["GET"])
+def view_frontpage():
+    pantry = pantry_service.get_pantry()
+    recipe_list = file_handler.read_json_objects_recipe_txt()
+    return render_template("generate_recipe.html", recipes=recipe_list, pantry=pantry)
 
 
+@app.route("/add_recipe", methods=["POST"])
+def add_recipe():
+    recipe = request.get_json()
+    recipe_string = json.dumps(recipe)
+    if pantry_repository.test_database_connection():
+        pantry_repository.insert_recipe(recipe_string)
+    file_handler.write_to_txt("recipes.txt", recipe_string)
+
+    return request.json
+
+
+@app.route("/change_recipe", methods=["POST"])
 @app.route("/recipes", methods=["GET"])
 def view_recipes():
     recipe_list = file_handler.read_json_objects_recipe_txt()

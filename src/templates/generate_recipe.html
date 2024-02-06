@@ -228,7 +228,7 @@
         let jsonResponse = JSON.stringify(resp);
         console.log(jsonResponse);
         loading.style.display = "none";
-        return fetch("/frontend", {
+        return fetch("/add_recipe", {
           headers: {
             "Content-Type": "application/json",
           },
@@ -267,7 +267,7 @@
       .then(resp => {
         let jsonResponse = JSON.stringify(resp);
         console.log(jsonResponse);
-        return fetch("/frontend", {
+        return fetch("/add_recipe_change", {
           headers: {
             "Content-Type": "application/json",
           },
