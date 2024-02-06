@@ -54,6 +54,4 @@ class OpenAIService:
 
         response = self._send_messages_to_gpt()
 
-        print(self.messages)
-
         return json.loads(response.content)

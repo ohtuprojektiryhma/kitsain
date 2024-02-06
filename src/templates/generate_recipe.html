@@ -241,11 +241,16 @@
         // Handle error
         console.log("error ", error);
       })
+      .then(() => {
+        location.reload()
+      })
 
   }
 
 
   function changeRecipe() {
+    var loading = document.getElementById("loading")
+    loading.style.display = "block";
     event.preventDefault();
     var recipe_changes = document.getElementById("recipe_change").value;
     var object = {};
@@ -267,6 +272,7 @@
       .then(resp => {
         let jsonResponse = JSON.stringify(resp);
         console.log(jsonResponse);
+        loading.style.display = "none";
         return fetch("/add_recipe_change", {
           headers: {
             "Content-Type": "application/json",
@@ -280,5 +286,9 @@
         // Handle error
         console.log("error ", error);
       })
+      .then(() => {
+        location.reload()
+      })
+
   }
 </script>

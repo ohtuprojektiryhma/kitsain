@@ -51,7 +51,18 @@ def add_recipe():
     return request.json
 
 
-@app.route("/change_recipe", methods=["POST"])
+@app.route("/add_recipe_change", methods=["POST"])
+def add_recipe_change():
+    recipe = request.get_json()
+    recipe_string = json.dumps(recipe)
+    print(recipe_string)
+    if pantry_repository.test_database_connection():
+        pantry_repository.insert_recipe(recipe_string)
+    file_handler.overwrite_latest_recipe("recipes.txt", recipe_string)
+
+    return request.json
+
+
 @app.route("/recipes", methods=["GET"])
 def view_recipes():
     recipe_list = file_handler.read_json_objects_recipe_txt()
