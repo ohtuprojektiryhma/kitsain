@@ -148,7 +148,7 @@
       object[key].push(value);
     });
     var json = JSON.stringify(object);
-    fetch("/mock_generate", {
+    fetch("/generate", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -163,6 +163,7 @@
       })
       .then(resp => {
         let jsonResponse = JSON.stringify(resp);
+        console.log(jsonResponse);
         return fetch("/frontend", {
           headers: {
             "Content-Type": "application/json",
