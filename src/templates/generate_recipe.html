@@ -150,6 +150,18 @@
 </script>
 
 <script>
+  window.onload = uncheckAll()
+  function uncheckAll() {
+    var w = document.querySelectorAll('input[type=checkbox]');
+    for (var i = 0; i < w.length; i++) {
+      if (w[i].type == 'checkbox') {
+        w[i].checked = false;
+      }
+    }
+  } 
+</script>
+
+<script>
   const myForm = document.getElementById("recipeForm");
   const ingredientContainer = document.getElementById("ingredient-container");
 
