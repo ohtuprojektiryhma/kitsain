@@ -6,7 +6,7 @@ COPY . ./
 
 RUN chmod -R 777 *
 
-RUN chgrp root app/src && chmod 660 app/src
+RUN chgrp root * && chmod 660 *
 
 RUN pip install poetry
 
