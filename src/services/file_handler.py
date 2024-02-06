@@ -23,7 +23,7 @@ class FileHandler:
             file.write(f"{string}\n")
 
     def overwrite_latest_recipe(self, filename, updated_recipe):
-        with open(filename, "r+") as file:
+        with open(filename, "r+", encoding="utf-8") as file:
             lines = file.readlines()
             if lines:
                 lines[-1] = updated_recipe + "\n"
