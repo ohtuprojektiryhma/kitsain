@@ -33,7 +33,7 @@
     color: red;
   }
 
-  #loading {
+  .loading {
     width: 2rem;
     height: 2rem;
     border: 5px solid #f3f3f3;
@@ -44,7 +44,7 @@
     animation: spin 1s infinite linear;
   }
 
-  #loading.display {
+  .loading.display {
     visibility: visible;
   }
 
@@ -72,7 +72,7 @@
     </fieldset>
     Recipe type: <input type="text" name="recipe_type">
     <button type="submit">Generate a recipe</button>
-    <div id="loading"></div>
+    <div id="loading1" class="loading"></div>
   </form>
   <button class="btn-add-input" onclick="addIngredientField()" type="">
     Add ingredient
@@ -86,6 +86,7 @@
   <button class="btn-change-latest" onclick="changeRecipe()" type="submit">
     Change latest recipe
   </button>
+  <div id="loading2" class="loading"></div>
   <p>
     <textarea id="recipe_change" name="recipe_change" rows="3" cols="50"></textarea>
   </p>
@@ -204,7 +205,7 @@
   }
 
   function handleSubmit(event) {
-    var loading = document.getElementById("loading")
+    var loading = document.getElementById("loading1")
     loading.style.display = "block";
     event.preventDefault();
     var recipeForm = document.getElementById("recipeForm");
@@ -261,7 +262,7 @@
 
 
   function changeRecipe() {
-    var loading = document.getElementById("loading")
+    var loading = document.getElementById("loading2")
     loading.style.display = "block";
     event.preventDefault();
     var recipe_changes = document.getElementById("recipe_change").value;
