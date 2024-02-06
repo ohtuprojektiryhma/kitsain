@@ -22,7 +22,15 @@
   }
 
   .btn-change-latest {
+    color: blue;
+  }
+
+  .btn-add-input {
     color: green;
+  }
+
+  .btn-rm-input {
+    color: red;
   }
 </style>
 
@@ -42,6 +50,9 @@
   </form>
   <button class="btn-add-input" onclick="addIngredientField()" type="">
     Add ingredient
+  </button>
+  <button class="btn-rm-input" onclick="removeIngredientField()" type="">
+    Remove ingredients
   </button>
   <p></p>
   <p></p>
@@ -75,17 +86,18 @@
 <div class="pantry">
   Pantry:
   {% for ingredient in pantry %}
-  <div>
+  <div id="pantry_contents">
     <b>{{ ingredient.name }}</b> ({{ ingredient.barcode }})
-    <input type="checkbox" id="checkbox_{{ ingredient.name }}" name="ingredientCheckbox" value="{{ ingredient.name }}">
+    <input type="checkbox" id="checkbox_{{ ingredient.barcode }}" name="ingredientCheckbox"
+      value="{{ ingredient.name }}">
     <script>
-      var checkbox = document.querySelector(`#checkbox_{{ ingredient.name }}`);
+      var checkbox = document.querySelector(`#checkbox_{{ ingredient.barcode }}`);
 
       checkbox.addEventListener('change', function () {
         if (this.checked) {
-          console.log("Checkbox is checked..");
+          addIngredientField("{{ ingredient.name }}");
         } else {
-          console.log("Checkbox is not checked..");
+          removeIngredientField("{{ ingredient.name }}")
         }
       });
     </script>
@@ -115,7 +127,7 @@
 
   myForm.addEventListener("submit", handleSubmit);
 
-  function addIngredientField() {
+  function addIngredientField(ingredientName) {
     // create an input field to insert
     const newIngredientField = document.createElement("input");
     // set input field data type to text
@@ -125,9 +137,30 @@
     // set required
     newIngredientField.setAttribute("required", "");
 
+    if (ingredientName) {
+      newIngredientField.value = `${ingredientName}`;
+    }
+
     newIngredientField.classList.add("input-field");
     // insert element into the container
     ingredientContainer.appendChild(newIngredientField);
+  }
+
+  function removeIngredientField(ingredientName) {
+    if (ingredientContainer.children.length > 1) {
+      if (ingredientName) {
+        for (let i = 0; i < ingredientContainer.children.length; i++) {
+          if (ingredientContainer.children[i].value === ingredientName) {
+            ingredientContainer.removeChild(ingredientContainer.children[i]);
+          }
+        }
+      } else {
+        while (ingredientContainer.children.length > 1) {
+          ingredientContainer.removeChild(ingredientContainer.lastChild);
+        }
+        document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+      }
+    }
   }
 
   function handleSubmit(event) {
