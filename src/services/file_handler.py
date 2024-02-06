@@ -22,6 +22,17 @@ class FileHandler:
         with open(filename, "a", encoding="utf-8") as file:
             file.write(f"{string}\n")
 
+    def overwrite_latest_recipe(self, filename, updated_recipe):
+        with open(filename, "r+") as file:
+            lines = file.readlines()
+            if lines:
+                lines[-1] = updated_recipe + "\n"  # Replace the last line
+                file.seek(0)  # Go back to the start of the file
+                file.writelines(lines)  # Write the modified lines
+                file.truncate()  # Truncate the file to the new size
+            else:
+                file.write(updated_recipe + "\n")  # Write the line if file is empty
+
     def read_json_objects_recipe_txt(self):
         recipe_list = []
         with open("recipes.txt", "a+", encoding="utf-8") as f:
