@@ -48,5 +48,5 @@ Run this command:
 Add a secret key to .env file and openai api key
 
 # Retrospectives
-[23.1.](https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit)
+[23.1.]([https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit](https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit?usp=sharing)https://docs.google.com/document/d/1ZivzgREy71r0VdCvOTpKTNAs_Ou_4RDgU0-XU8o7lsw/edit?usp=sharing)
 
