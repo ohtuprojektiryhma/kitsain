@@ -167,10 +167,12 @@ selenium-screenshot*
 log.html
 output.xml
 report.html# Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__
 *.py[cod]
 *$py.class
+**/pytest_cache
 
+.DS_Store
 # C extensions
 *.so
 
