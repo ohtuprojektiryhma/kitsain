@@ -9,6 +9,12 @@ Generates a new recipe from given ingredients and conditions.
 - ingredients: JSON array of ingredients as strings.
 - recipe_type: String of conditions that the recipe must fulfill.
 
+Optional fields in the request body:
+
+- exp_soon: JSON array of ingredients, that have expiration dates coming up, and such will always be used in the generated recipe. Defaults to "".
+- supplies: JSON array of kitchen supplies that can be used in the generated recipe, defaults to "basic kitchen supplies".
+- pantry_only: String that informs whether only pantry items should be used in the generated recipe, defaults to "False"
+
 **Returns:** JSON object with fields:
 
 - ingredients: JSON object with format "ingredient": "amount".
@@ -20,7 +26,13 @@ Generates a new recipe from given ingredients and conditions.
 Request
 
 ```json
-{"ingredients": ["banana", "milk"], "recipe_type": "sweet"}
+{
+  "ingredients": ["banana"],
+  "recipe_type": "sweet",
+  "exp_soon": ["milk"],
+  "supplies": ["blender"],
+  "pantry_only": "True"
+}
 ```
 
 Response
