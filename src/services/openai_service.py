@@ -2,15 +2,19 @@ import json
 
 GENERATION_MESSAGE = {
     "role": "system",
-    "content": """You are a professional kitchen assistant, with access and knowledge
-                about the users pantry, you give recipe suggestions based on these ingredients,
-                but don't have to use all of them to make a recipe. You only give responses
-                in a single JSON object that only has the keys in this form: first key = recipe_name,
-                second key = ingredients, third key = instructions. The values of the keys should be
-                like this: first value = the name of the recipe we are making, second value =
-                a dictionary of the ingredients used in the recipe and the key being the ingredient
-                and value being the amount needed, third value = instructions list with the
-                instructions ordered by the order which they are done in.""",
+    "content": """You are a tool that generates recipes for the user in a precise 
+    JSON dict form. You are given a JSON dict with the following fields:
+    {"pantry" : {"expiring_soon" : [items], "items" : [items]}, 
+    "recipe_type" : type of recipe to be generated, 
+    "supplies" : [kitchen supplies available], 
+    "use_only_pantry_items" : tells if you can use only pantry items in the generated recipe},
+    items in pantry could be in any language, but always provide the ingredient in english
+    in the generated recipe, always use the items that are expiring soon in the recipe, 
+    and the other pantry items if they fit with the recipe, respond only with a JSON dict, 
+    provide the following fields in a JSON dict: recipe_name : name of the generated recipe,
+    ingredients : list of dicts with the key being the ingredient name, and the value being
+    the amount needed for the recipe in metric system, instructions : list of simple
+    and short instructions on how to make the recipe""",
 }
 
 
@@ -23,7 +27,7 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="gpt-4",
+            model="ft:gpt-3.5-turbo-1106:personal::8rmr49Xj",
             messages=self.messages,
         )
         response = completion.choices[0].message
@@ -32,15 +36,23 @@ class OpenAIService:
         self.messages.append(response)
         return response
 
-    def get_recipe(self, ingredients: str, recipe_type: str):
+    def get_recipe(
+        self,
+        ingredients: str,
+        recipe_type: str,
+        waste_products: str = "",
+        appliances: str = "",
+        pantry_only: str = "True",
+    ):
         # init chat session
         self.messages.clear()
         self.messages.append(GENERATION_MESSAGE)
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""This is my pantry: {ingredients}. Please give a {recipe_type}
-                            recipe I can make with these.""",
+                "content": f"""{{"pantry" : {{"expiring_soon" : [{waste_products}],
+                "items" : [{ingredients}]}},"recipe_type" : "{recipe_type}","supplies" : [{appliances}],
+                "use_only_pantry_items" : {pantry_only}}}""",
             }
         )
 
