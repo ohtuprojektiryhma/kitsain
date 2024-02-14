@@ -40,8 +40,8 @@ class OpenAIService:
         self,
         ingredients: str,
         recipe_type: str,
-        waste_products: str = "",
-        appliances: str = "",
+        expiring_soon: str = "",
+        supplies: str = "",
         pantry_only: str = "True",
     ):
         # init chat session
@@ -50,9 +50,9 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"expiring_soon" : [{waste_products}],
-                "items" : [{ingredients}]}},"recipe_type" : "{recipe_type}","supplies" : [{appliances}],
-                "use_only_pantry_items" : {pantry_only}}}""",
+                "content": f"""{{"pantry" : {{"expiring_soon" : "[{expiring_soon}]",
+                "items" : ["{ingredients}"]}},"recipe_type" : "{recipe_type}","supplies" : "[{supplies}]",
+                "use_only_pantry_items" : "{pantry_only}"}}""",
             }
         )
 

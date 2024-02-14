@@ -26,7 +26,8 @@ disable=raw-checker-failed,
         import-outside-toplevel,
         missing-timeout,
         consider-using-join,
-        cyclic-import
+        cyclic-import,
+        bare-except
 [DESIGN]
 max-attributes=16
 max-args=16

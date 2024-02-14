@@ -20,8 +20,24 @@ def mock_generate():
 @app.route("/generate", methods=["POST"])
 def generate():
     request_body = request.json
+    try:
+        exp_soon = request_body["exp_soon"]
+    except:
+        exp_soon = ""
+    try:
+        supplies = request_body["supplies"]
+    except:
+        supplies = "basic kitchen supplies"
+    try:
+        pantry_only = request_body["pantry_only"]
+    except:
+        pantry_only = "False"
     recipe = openai_service.get_recipe(
-        request_body["ingredients"], request_body["recipe_type"]
+        request_body["ingredients"],
+        request_body["recipe_type"],
+        exp_soon,
+        supplies,
+        pantry_only,
     )
     return recipe
 
