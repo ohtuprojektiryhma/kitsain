@@ -36,11 +36,11 @@ The backlog is set to private according to our customers wishes.
 Then run these commands:
 
 ```cmd
- docker build -t kitsain
+docker build -t kitsain .
 ```
 
 ```cmd
- docker run -dp 127.0.0.1:5000:5000 kitsain
+docker run -it --rm -p 5000:5000 kitsain
 ```
 
 Now the application is running on localhost, and you can [send requests](./documentation/restapidocs.md) to the API!
