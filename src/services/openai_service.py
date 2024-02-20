@@ -50,9 +50,7 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"expiring_soon" : "[{expiring_soon}]",
-                "items" : ["{ingredients}"]}},"recipe_type" : "{recipe_type}","supplies" : "[{supplies}]",
-                "use_only_pantry_items" : "{pantry_only}"}}""",
+                "content": f"""{{"pantry" : {{"expiring_soon" : {json.dumps(expiring_soon)},"items" : {json.dumps(ingredients)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {pantry_only}}}""", # pylint: disable=C0301
             }
         )
 
