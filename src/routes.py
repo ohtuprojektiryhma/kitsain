@@ -23,15 +23,15 @@ def generate():
     try:
         exp_soon = request_body["exp_soon"]
     except:
-        exp_soon = ""
+        exp_soon = []
     try:
         supplies = request_body["supplies"]
     except:
-        supplies = "basic kitchen supplies"
+        supplies = ["basic kitchen supplies"]
     try:
         pantry_only = request_body["pantry_only"]
     except:
-        pantry_only = "False"
+        pantry_only = False
     recipe = openai_service.get_recipe(
         request_body["ingredients"],
         request_body["recipe_type"],
@@ -83,8 +83,3 @@ def add_recipe_change():
 def view_recipes():
     recipe_list = file_handler.read_json_objects_recipe_txt()
     return render_template("view_recipes.html", recipes=recipe_list)
-
-
-if __name__ == "__main__":
-    app.debug = True
-    app.run()

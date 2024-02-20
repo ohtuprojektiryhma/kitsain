@@ -38,11 +38,11 @@ class OpenAIService:
 
     def get_recipe(
         self,
-        ingredients: str,
+        ingredients: list[str],
         recipe_type: str,
-        expiring_soon: str = "",
-        supplies: str = "",
-        pantry_only: str = "True",
+        expiring_soon: list[str],
+        supplies: list[str],
+        pantry_only: bool,
     ):
         # init chat session
         self.messages.clear()

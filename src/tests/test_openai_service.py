@@ -11,7 +11,9 @@ class TestOpenAIService(TestCase):
 
     def test_get_recipe(self):
         # Call recipe generation method
-        result = self.service.get_recipe("Water, Salt", "Soup")
+        result = self.service.get_recipe(
+            ["Water", "Salt"], "Soup", [], ["Spoon"], False
+        )
 
         # Validate that a recipe was generated
         assert result == {
@@ -22,7 +24,7 @@ class TestOpenAIService(TestCase):
 
     def test_change_recipe(self):
         # Call recipe generation method
-        self.service.get_recipe("Water, Salt", "Soup")
+        self.service.get_recipe(["Water", "Salt"], "Soup", [], ["Spoon"], False)
 
         # We want to add pepper to the recipe, so we call the recipe change method
         result = self.service.change_recipe("Add pepper")
