@@ -12,7 +12,7 @@ GENERATION_MESSAGE = {
     in the generated recipe, always use the items that are expiring soon in the recipe, 
     and the other pantry items if they fit with the recipe, respond only with a JSON dict, 
     provide the following fields in a JSON dict: recipe_name : name of the generated recipe,
-    ingredients : list of dicts with the key being the ingredient name, and the value being
+    ingredients : dict with the key being the ingredient name, and the value being
     the amount needed for the recipe in metric system, instructions : list of simple
     and short instructions on how to make the recipe""",
 }
