@@ -1,20 +1,7 @@
 import json
 
 GENERATION_MESSAGE = {
-    "role": "system",
-    "content": """You are a tool that generates recipes for the user in a precise 
-    JSON dict form. You are given a JSON dict with the following fields:
-    {"pantry" : {"expiring_soon" : [items], "items" : [items]}, 
-    "recipe_type" : type of recipe to be generated, 
-    "supplies" : [kitchen supplies available], 
-    "use_only_pantry_items" : tells if you can use only pantry items in the generated recipe},
-    items in pantry could be in any language, but always provide the ingredient in english
-    in the generated recipe, always use the items that are expiring soon in the recipe, 
-    and the other pantry items if they fit with the recipe, respond only with a JSON dict, 
-    provide the following fields in a JSON dict: recipe_name : name of the generated recipe,
-    ingredients : dict with the key being the ingredient name, and the value being
-    the amount needed for the recipe in metric system, instructions : list of simple
-    and short instructions on how to make the recipe""",
+    "role": "system", "content": "You are a tool that generates recipes. You are given the fields:{\"pantry\" : {\"expiring_soon\" : [items], \"items\" : [items]}, \"recipe_type\" : type of recipe to be generated, \"supplies\" : [kitchen supplies available], \"use_only_pantry_items\" : tells if you can use only pantry items}, items that are expiring soon must be used, provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe", # pylint: disable=C0301
 }
 
 
@@ -27,7 +14,7 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="ft:gpt-3.5-turbo-1106:personal::8rmr49Xj",
+            model="ft:gpt-3.5-turbo-1106:personal::8ueCVs15",
             messages=self.messages,
         )
         response = completion.choices[0].message
