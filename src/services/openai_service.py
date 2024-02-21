@@ -14,7 +14,7 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="ft:gpt-3.5-turbo-1106:personal::8ueCVs15",
+            model="ft:gpt-3.5-turbo-1106:personal::8ufWjZk8",
             messages=self.messages,
         )
         response = completion.choices[0].message
