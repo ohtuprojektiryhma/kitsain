@@ -1,7 +1,8 @@
 import json
 
 GENERATION_MESSAGE = {
-    "role": "system", "content": "You are a tool that generates recipes. You are given the fields:{\"pantry\" : {\"expiring_soon\" : [items], \"items\" : [items]}, \"recipe_type\" : type of recipe to be generated, \"supplies\" : [kitchen supplies available], \"use_only_pantry_items\" : tells if you can use only pantry items}, items that are expiring soon must be used, provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe", # pylint: disable=C0301
+    "role": "system",
+    "content": 'You are a tool that generates recipes. You are given the fields:{"pantry" : {"expiring_soon" : [items], "items" : [items]}, "recipe_type" : type of recipe to be generated, "supplies" : [kitchen supplies available], "use_only_pantry_items" : tells if you can use only pantry items}, items that are expiring soon must be used, provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe',  # pylint: disable=C0301
 }
 
 
@@ -37,7 +38,7 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"expiring_soon" : {json.dumps(expiring_soon)},"items" : {json.dumps(ingredients)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {pantry_only}}}""", # pylint: disable=C0301
+                "content": f"""{{"pantry" : {{"expiring_soon" : {json.dumps(expiring_soon)},"items" : {json.dumps(ingredients)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {json.dumps(pantry_only)}}}""",  # pylint: disable=C0301
             }
         )
 
