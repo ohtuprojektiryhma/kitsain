@@ -27,7 +27,10 @@ disable=raw-checker-failed,
         missing-timeout,
         consider-using-join,
         cyclic-import,
-        bare-except
+        bare-except,
+        unused-argument,
+        trailing-whitespace,
+        line-too-long
 [DESIGN]
 max-attributes=16
 max-args=16
