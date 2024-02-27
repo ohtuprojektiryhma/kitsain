@@ -5,6 +5,11 @@ GENERATION_MESSAGE = {
     "content": 'You are a tool that generates recipes. You are given the fields:{"pantry" : {"expiring_soon" : [items], "items" : [items]}, "recipe_type" : type of recipe to be generated, "supplies" : [kitchen supplies available], "use_only_pantry_items" : tells if you can use only pantry items}, items that are expiring soon must be used, provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe',  # pylint: disable=C0301
 }
 
+CHANGE_MESSAGE = {
+    "role": "system",
+    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe"
+}
+
 
 class OpenAIService:
     def __init__(self, client):
@@ -15,7 +20,7 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="ft:gpt-3.5-turbo-1106:personal::8ufWjZk8",
+            model="gpt-3.5-turbo",
             messages=self.messages,
         )
         response = completion.choices[0].message
@@ -46,9 +51,12 @@ class OpenAIService:
 
         return json.loads(response.content)
 
-    def change_recipe(self, change: str):
-        # print(change)
-        self.messages.append({"role": "user", "content": change})
+    def change_recipe(self, details, change: str):
+        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI, 
+        # then we a message where details = details of recipe we want to change and change = the change we want to the recipe
+        self.messages.clear()
+        self.messages.append(CHANGE_MESSAGE)
+        self.messages.append({"role": "user", "content": f"Recipe: {details}, wanted changes: {change}"})
 
         response = self._send_messages_to_gpt()
 
