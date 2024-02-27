@@ -10,7 +10,6 @@ CHANGE_MESSAGE = {
     "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
 }
 
-
 class OpenAIService:
     def __init__(self, client):
         self.client = client
@@ -56,9 +55,16 @@ class OpenAIService:
         # then we a message where details = details of recipe we want to change
         # and change = the change we want to the recipe
         self.messages.clear()
+        print(details)
+        print(change)
         self.messages.append(CHANGE_MESSAGE)
-        self.messages.append({"role": "user", "content": f"Recipe: {details}, wanted changes: {change}"})
+        self.messages.append(
+            {
+                "role": "user", "content": f"""{{"details": {json.dumps(details)}, "change": {json.dumps(change)}}}"""
+            }    
+        )
 
         response = self._send_messages_to_gpt()
+        print(response)
 
         return json.loads(response.content)
