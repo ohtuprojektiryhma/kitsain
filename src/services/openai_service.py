@@ -51,7 +51,7 @@ class OpenAIService:
 
         return json.loads(response.content)
 
-    def change_recipe(self, details, change: str):
+    def change_recipe(self, details, change: str, ingredients: list, recipe_type: str, exp_soon: list, supplies: list):
         # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
         # then we a message where details = details of recipe we want to change
         # and change = the change we want to the recipe
