@@ -7,7 +7,7 @@ GENERATION_MESSAGE = {
 
 CHANGE_MESSAGE = {
     "role": "system",
-    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe"
+    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
 }
 
 
@@ -52,8 +52,9 @@ class OpenAIService:
         return json.loads(response.content)
 
     def change_recipe(self, details, change: str):
-        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI, 
-        # then we a message where details = details of recipe we want to change and change = the change we want to the recipe
+        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
+        # then we a message where details = details of recipe we want to change
+        # and change = the change we want to the recipe
         self.messages.clear()
         self.messages.append(CHANGE_MESSAGE)
         self.messages.append({"role": "user", "content": f"Recipe: {details}, wanted changes: {change}"})
