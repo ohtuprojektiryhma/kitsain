@@ -45,7 +45,7 @@ def generate():
 @app.route("/change", methods=["POST"])
 def change():
     request_body = request.json
-    recipe = openai_service.change_recipe("details", request_body["change"], request["ingredients"], request["recipe_type"], request["exp_soon"], request["supplies"])
+    recipe = openai_service.change_recipe("details", request_body["change"], request_body["ingredients"], request["recipe_type"], request["exp_soon"], request["supplies"])
     return recipe
 
 
