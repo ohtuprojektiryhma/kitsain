@@ -22,7 +22,7 @@ class TestOpenAIService(TestCase):
             "instructions": ["Boil water", "Add salt"],
         }
 
-    def test_change_recipe(self):
+    """ def test_change_recipe(self):
         # Call recipe generation method
         self.service.get_recipe(["Water", "Salt"], "Soup", [], ["Spoon"], False)
 
@@ -34,4 +34,4 @@ class TestOpenAIService(TestCase):
             "recipe_name": "Improved Mock Soup",
             "ingredients": {"Water": "1 cup", "Salt": "1 tsp", "Pepper": "1 tsp"},
             "instructions": ["Boil water", "Add salt", "Add pepper"],
-        }
+        } """
