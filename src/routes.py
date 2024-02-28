@@ -17,6 +17,7 @@ REQUEST_QUEUE = deque(maxlen=MAX_REQUESTS_PER_TIME_FRAME)
 SECONDS_IN_HOUR = 3600
 SECONDS_IN_MINUTE = 60
 
+# pylint: disable=inconsistent-return-statements
 def before_request():
     if request.endpoint != 'mock_generate':
         _check_rate_limit()

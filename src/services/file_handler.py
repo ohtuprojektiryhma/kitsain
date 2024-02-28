@@ -1,7 +1,7 @@
 import csv
 import json
 
-# pylint:disable=no-self-use
+
 class FileHandler:
     
     def read_from_csv(self, filename):
