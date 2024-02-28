@@ -1,12 +1,12 @@
 import json
-from flask import request, render_template
+import time
+from collections import deque
+from flask import request, render_template, jsonify
 from app import app, openai_service
 from repositories.pantry_repository import PantryRepository
 from services.pantry_service import PantryService
 from services.file_handler import FileHandler
 from db_connection import db
-import time
-from collections import deque
 
 file_handler = FileHandler()
 pantry_repository = PantryRepository(db)
@@ -29,8 +29,7 @@ def _check_rate_limit():
     
     if len(REQUEST_QUEUE) >= MAX_REQUESTS_PER_TIME_FRAME:
         return jsonify({"error": "Rate limit exceeded"}), 429
-    else:
-        REQUEST_QUEUE.append(current_time)
+    REQUEST_QUEUE.append(current_time)
 
 @app.route("/mock_generate", methods=["POST"])
 def mock_generate():

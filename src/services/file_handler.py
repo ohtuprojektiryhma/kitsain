@@ -1,8 +1,9 @@
 import csv
 import json
 
-
+# pylint:disable=no-self-use
 class FileHandler:
+    
     def read_from_csv(self, filename):
         rows = []
         with open(filename, "a+", newline="", encoding="utf-8") as csvfile:

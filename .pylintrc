@@ -30,7 +30,7 @@ disable=raw-checker-failed,
         bare-except,
         unused-argument,
         trailing-whitespace,
-        line-too-long
+        line-too-long,
 [DESIGN]
 max-attributes=16
 max-args=16
