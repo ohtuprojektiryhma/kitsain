@@ -5,11 +5,32 @@ from repositories.pantry_repository import PantryRepository
 from services.pantry_service import PantryService
 from services.file_handler import FileHandler
 from db_connection import db
+import time
+from collections import deque
 
 file_handler = FileHandler()
 pantry_repository = PantryRepository(db)
 pantry_service = PantryService(pantry_repository)
 
+MAX_REQUESTS_PER_TIME_FRAME = 500
+REQUEST_QUEUE = deque(maxlen=MAX_REQUESTS_PER_TIME_FRAME)
+SECONDS_IN_HOUR = 3600
+SECONDS_IN_MINUTE = 60
+
+def before_request():
+    if request.endpoint != 'mock_generate':
+        _check_rate_limit()
+
+def _check_rate_limit():
+    current_time = time.time()
+
+    while REQUEST_QUEUE and current_time - REQUEST_QUEUE[0] >= SECONDS_IN_HOUR:
+        REQUEST_QUEUE.popleft()
+    
+    if len(REQUEST_QUEUE) >= MAX_REQUESTS_PER_TIME_FRAME:
+        return jsonify({"error": "Rate limit exceeded"}), 429
+    else:
+        REQUEST_QUEUE.append(current_time)
 
 @app.route("/mock_generate", methods=["POST"])
 def mock_generate():
