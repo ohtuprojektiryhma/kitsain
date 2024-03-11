@@ -17,20 +17,23 @@ REQUEST_QUEUE = deque(maxlen=MAX_REQUESTS_PER_TIME_FRAME)
 SECONDS_IN_HOUR = 3600
 SECONDS_IN_MINUTE = 60
 
+
 # pylint: disable=inconsistent-return-statements
 def before_request():
-    if request.endpoint != 'mock_generate':
+    if request.endpoint != "mock_generate":
         _check_rate_limit()
+
 
 def _check_rate_limit():
     current_time = time.time()
 
     while REQUEST_QUEUE and current_time - REQUEST_QUEUE[0] >= SECONDS_IN_HOUR:
         REQUEST_QUEUE.popleft()
-    
+
     if len(REQUEST_QUEUE) >= MAX_REQUESTS_PER_TIME_FRAME:
         return jsonify({"error": "Rate limit exceeded"}), 429
     REQUEST_QUEUE.append(current_time)
+
 
 @app.route("/mock_generate", methods=["POST"])
 def mock_generate():
@@ -53,12 +56,17 @@ def generate():
         pantry_only = request_body["pantry_only"]
     except:
         pantry_only = False
+    try:
+        language = request_body["language"]
+    except:
+        language = "english"
     recipe = openai_service.get_recipe(
         request_body["ingredients"],
         request_body["recipe_type"],
         exp_soon,
         supplies,
         pantry_only,
+        language,
     )
     return recipe
 
@@ -66,7 +74,14 @@ def generate():
 @app.route("/change", methods=["POST"])
 def change():
     request_body = request.json
-    recipe = openai_service.change_recipe(request_body["details"], request_body["change"], request_body["ingredients"], request_body["recipeType"], request_body["expSoon"], request_body["supplies"])
+    recipe = openai_service.change_recipe(
+        request_body["details"],
+        request_body["change"],
+        request_body["ingredients"],
+        request_body["recipeType"],
+        request_body["expSoon"],
+        request_body["supplies"],
+    )
     return recipe
 
 

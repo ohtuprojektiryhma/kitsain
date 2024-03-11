@@ -11,6 +11,6 @@ while True:
     if ingredient == "s":
         break
     if ingredient == "g":
-        print(api_connection.request_recipe(ingredients))  # , "vegan"))
+        print(api_connection.request_recipe(ingredients, "finnish"))  # , "vegan"))
     else:
         ingredients.append(ingredient)

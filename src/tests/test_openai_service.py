@@ -12,7 +12,7 @@ class TestOpenAIService(TestCase):
     def test_get_recipe(self):
         # Call recipe generation method
         result = self.service.get_recipe(
-            ["Water", "Salt"], "Soup", [], ["Spoon"], False
+            ["Water", "Salt"], "Soup", [], ["Spoon"], False, "english"
         )
 
         # Validate that a recipe was generated
