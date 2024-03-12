@@ -5,13 +5,11 @@ GENERATION_MESSAGE = {
     "content": """
 You are a tool that generates recipes. You are given the following requirements in JSON form:
 {
-    "pantry": {
-        "items": [items available in pantry],
-        "expiring_soon": [items in pantry that are expiring soon, these must be used in the recipe]
-    },
+    "pantry_items": [items available in pantry],
+    "required_items": [items that must be used in the recipe],
     "recipe_type": type of recipe to be generated,
     "supplies": [kitchen supplies available],
-    "use_only_pantry_items": boolean, tells if you can only use items in pantry,
+    "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
     "language": language of the generated recipe
 }
 Generate a recipe in the following JSON format:
@@ -20,7 +18,7 @@ Generate a recipe in the following JSON format:
     "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
     "instructions": [list of instructions on how to make the recipe]
 }
-""",  # pylint: disable=C0301
+""",
 }
 
 CHANGE_MESSAGE = {
@@ -62,7 +60,16 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"items" : {json.dumps(ingredients)},"expiring_soon" : {json.dumps(expiring_soon)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {json.dumps(pantry_only)}, "language": {json.dumps(language)}}}""",  # pylint: disable=C0301
+                "content": f"""
+{{
+    "pantry_items": {json.dumps(ingredients)},
+    "required_items": {json.dumps(expiring_soon)},
+    "recipe_type": {json.dumps(recipe_type)},
+    "supplies": {json.dumps(supplies)},
+    "pantry_only": {json.dumps(pantry_only)},
+    "language": {json.dumps(language)}
+}}
+""",
             }
         )
 
