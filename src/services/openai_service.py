@@ -8,7 +8,7 @@ You are a tool that generates recipes. You are given the following requirements 
     "pantry_items": [items available in pantry],
     "required_items": [items that must be used in the recipe],
     "recipe_type": type of recipe to be generated,
-    "supplies": [kitchen supplies available],
+    "special_supplies": [special kitchen supplies available],
     "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
     "language": language of the generated recipe
 }
@@ -65,7 +65,7 @@ class OpenAIService:
     "pantry_items": {json.dumps(ingredients)},
     "required_items": {json.dumps(expiring_soon)},
     "recipe_type": {json.dumps(recipe_type)},
-    "supplies": {json.dumps(supplies)},
+    "special_supplies": {json.dumps(supplies)},
     "pantry_only": {json.dumps(pantry_only)},
     "language": {json.dumps(language)}
 }}

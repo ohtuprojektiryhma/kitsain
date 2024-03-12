@@ -51,7 +51,7 @@ def generate():
     try:
         supplies = request_body["supplies"]
     except:
-        supplies = ["basic kitchen supplies"]
+        supplies = []
     try:
         pantry_only = request_body["pantry_only"]
     except:
