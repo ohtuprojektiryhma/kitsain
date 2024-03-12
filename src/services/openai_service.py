@@ -12,7 +12,7 @@ You are a tool that generates recipes. You are given the following requirements 
     "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
     "language": language of the generated recipe
 }
-Generate a recipe in the following JSON format:
+Generate a recipe precisely in the following JSON format:
 {
     "recipe_name": name of the generated recipe,
     "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
@@ -75,7 +75,12 @@ class OpenAIService:
 
         response = self._send_messages_to_gpt()
 
-        return json.loads(response.content)
+        try:
+            return json.loads(response.content)
+        except json.JSONDecodeError as err:
+            print("Error parsing JSON response from GPT. Response:")
+            print(response.content)
+            raise err
 
     def change_recipe(
         self,
