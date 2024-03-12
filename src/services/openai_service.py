@@ -2,7 +2,25 @@ import json
 
 GENERATION_MESSAGE = {
     "role": "system",
-    "content": 'You are a tool that generates recipes. You are given the fields:{"pantry" : {"expiring_soon" : [items], "items" : [items]}, "recipe_type" : type of recipe to be generated, "supplies" : [kitchen supplies available], "use_only_pantry_items" : tells if you can use only pantry items, "language" :  tells you in what language to give the instructions keep the provided fields in English}, items that are expiring soon must be used, provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe',  # pylint: disable=C0301
+    "content": """
+You are a tool that generates recipes. You are given the following requirements in JSON form:
+{
+    "pantry": {
+        "items": [items available in pantry],
+        "expiring_soon": [items in pantry that are expiring soon, these must be used in the recipe]
+    },
+    "recipe_type": type of recipe to be generated,
+    "supplies": [kitchen supplies available],
+    "use_only_pantry_items": boolean, tells if you can only use items in pantry,
+    "language": language of the generated recipe
+}
+Generate a recipe in the following JSON format:
+{
+    "recipe_name": name of the generated recipe,
+    "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
+    "instructions": [list of instructions on how to make the recipe]
+}
+""",  # pylint: disable=C0301
 }
 
 CHANGE_MESSAGE = {
@@ -44,7 +62,7 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"expiring_soon" : {json.dumps(expiring_soon)},"items" : {json.dumps(ingredients)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {json.dumps(pantry_only)}, "language": {json.dumps(language)}}}""",  # pylint: disable=C0301
+                "content": f"""{{"pantry" : {{"items" : {json.dumps(ingredients)},"expiring_soon" : {json.dumps(expiring_soon)}}},"recipe_type" : {json.dumps(recipe_type)},"supplies" : {json.dumps(supplies)},"use_only_pantry_items" : {json.dumps(pantry_only)}, "language": {json.dumps(language)}}}""",  # pylint: disable=C0301
             }
         )
 
