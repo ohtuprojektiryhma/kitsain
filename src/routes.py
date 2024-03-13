@@ -78,8 +78,8 @@ def change():
         request_body["details"],
         request_body["change"],
         request_body["ingredients"],
-        request_body["recipeType"],
-        request_body["expSoon"],
+        request_body["recipe_type"],
+        request_body["exp_soon"],
         request_body["supplies"],
     )
     return recipe
