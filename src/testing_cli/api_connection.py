@@ -1,12 +1,16 @@
 import requests
 
 
-class API_Connection:
+class APIConnection:
     def __init__(self):
         self.base_url = "http://127.0.0.1:5000"
 
-    def request_recipe(self, ingredients: list):
-        data = {"recipe_type": "vegan", "ingredients": ingredients}
+    def request_recipe(self, ingredients: list, language: str = "english"):
+        data = {
+            "recipe_type": "vegan",
+            "ingredients": ingredients,
+            "language": language,
+        }
         headers = {
             "Content-Type": "application/json",
         }

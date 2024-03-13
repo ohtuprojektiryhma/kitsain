@@ -2,19 +2,28 @@ import json
 
 GENERATION_MESSAGE = {
     "role": "system",
-    "content": """You are a tool that generates recipes for the user in a precise 
-    JSON dict form. You are given a JSON dict with the following fields:
-    {"pantry" : {"expiring_soon" : [items], "items" : [items]}, 
-    "recipe_type" : type of recipe to be generated, 
-    "supplies" : [kitchen supplies available], 
-    "use_only_pantry_items" : tells if you can use only pantry items in the generated recipe},
-    items in pantry could be in any language, but always provide the ingredient in english
-    in the generated recipe, always use the items that are expiring soon in the recipe, 
-    and the other pantry items if they fit with the recipe, respond only with a JSON dict, 
-    provide the following fields in a JSON dict: recipe_name : name of the generated recipe,
-    ingredients : list of dicts with the key being the ingredient name, and the value being
-    the amount needed for the recipe in metric system, instructions : list of simple
-    and short instructions on how to make the recipe""",
+    "content": """
+You are a tool that generates recipes. You are given the following requirements in JSON form:
+{
+    "pantry_items": [items available in pantry],
+    "required_items": [items that must be used in the recipe],
+    "recipe_type": type of recipe to be generated,
+    "special_supplies": [special kitchen supplies available],
+    "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
+    "language": language of the generated recipe
+}
+Generate a recipe precisely in the following JSON format:
+{
+    "recipe_name": name of the generated recipe,
+    "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
+    "instructions": [list of instructions on how to make the recipe]
+}
+""",
+}
+
+CHANGE_MESSAGE = {
+    "role": "system",
+    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
 }
 
 
@@ -27,7 +36,7 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="ft:gpt-3.5-turbo-1106:personal::8rmr49Xj",
+            model="gpt-3.5-turbo",
             messages=self.messages,
         )
         response = completion.choices[0].message
@@ -38,11 +47,12 @@ class OpenAIService:
 
     def get_recipe(
         self,
-        ingredients: str,
+        ingredients: list[str],
         recipe_type: str,
-        expiring_soon: str = "",
-        supplies: str = "",
-        pantry_only: str = "True",
+        expiring_soon: list[str],
+        supplies: list[str],
+        pantry_only: bool,
+        language: str,
     ):
         # init chat session
         self.messages.clear()
@@ -50,20 +60,52 @@ class OpenAIService:
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"pantry" : {{"expiring_soon" : "[{expiring_soon}]",
-                "items" : ["{ingredients}"]}},"recipe_type" : "{recipe_type}","supplies" : "[{supplies}]",
-                "use_only_pantry_items" : "{pantry_only}"}}""",
+                "content": f"""
+{{
+    "pantry_items": {json.dumps(ingredients)},
+    "required_items": {json.dumps(expiring_soon)},
+    "recipe_type": {json.dumps(recipe_type)},
+    "special_supplies": {json.dumps(supplies)},
+    "pantry_only": {json.dumps(pantry_only)},
+    "language": {json.dumps(language)}
+}}
+""",
             }
         )
 
         response = self._send_messages_to_gpt()
 
-        return json.loads(response.content)
+        try:
+            return json.loads(response.content)
+        except json.JSONDecodeError as err:
+            print("Error parsing JSON response from GPT. Response:")
+            print(response.content)
+            raise err
 
-    def change_recipe(self, change: str):
-        # print(change)
-        self.messages.append({"role": "user", "content": change})
+    def change_recipe(
+        self,
+        details,
+        change: str,
+        # ingredients: list,
+        # recipe_type: str,
+        # exp_soon: list,
+        # supplies: list,
+    ):  # pylint: disable=C0301
+        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
+        # then we a message where details = details of recipe we want to change
+        # and change = the change we want to the recipe
+        self.messages.clear()
+        print(details)
+        print(change)
+        self.messages.append(CHANGE_MESSAGE)
+        self.messages.append(
+            {
+                "role": "user",
+                "content": f"""{{"details": {json.dumps(details)}, "change": {json.dumps(change)}}}""",
+            }
+        )
 
         response = self._send_messages_to_gpt()
+        print(response)
 
         return json.loads(response.content)

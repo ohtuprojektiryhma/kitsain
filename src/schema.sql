@@ -4,6 +4,8 @@ drop table recipes;
 
 drop table instructions;
 
+drop usertoken;
+
 
 CREATE TABLE IF NOT EXISTS recipes (
     id SERIAL PRIMARY KEY,
@@ -22,4 +24,10 @@ CREATE TABLE IF NOT EXISTS instructions (
     id SERIAL PRIMARY KEY,
     step_number INTEGER,
     instruction_text TEXT
+);
+
+CREATE TABLE IF NOT EXISTS usertoken (
+    id SERIAL PRIMARY KEY,
+    token json,
+    usage INT
 );

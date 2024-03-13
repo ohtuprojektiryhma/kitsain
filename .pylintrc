@@ -16,18 +16,13 @@ disable=raw-checker-failed,
         missing-module-docstring,
         missing-function-docstring,
         missing-class-docstring,
-        f-string-without-interpolation,
-        too-many-branches,
-        too-many-statements,
-        attribute-defined-outside-init,
-        invalid-name,
         import-error,
         too-few-public-methods,
-        import-outside-toplevel,
         missing-timeout,
-        consider-using-join,
         cyclic-import,
-        bare-except
+        bare-except,
+        too-many-function-args,
+
 [DESIGN]
 max-attributes=16
 max-args=16

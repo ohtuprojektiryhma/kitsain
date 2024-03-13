@@ -11,9 +11,9 @@ Generates a new recipe from given ingredients and conditions.
 
 Optional fields in the request body:
 
-- exp_soon: JSON array of ingredients, that have expiration dates coming up, and such will always be used in the generated recipe. Defaults to "".
-- supplies: JSON array of kitchen supplies that can be used in the generated recipe, defaults to "basic kitchen supplies".
-- pantry_only: String that informs whether only pantry items should be used in the generated recipe, defaults to "False"
+- exp_soon: JSON array of ingredients, that have expiration dates coming up, and such will always be used in the generated recipe. Defaults to `[]`.
+- supplies: JSON array of kitchen supplies that can be used in the generated recipe, defaults to `["basic kitchen supplies"]`.
+- pantry_only: Boolean that informs whether only pantry items should be used in the generated recipe, defaults to `false`
 
 **Returns:** JSON object with fields:
 
@@ -31,7 +31,7 @@ Request
   "recipe_type": "sweet",
   "exp_soon": ["milk"],
   "supplies": ["blender"],
-  "pantry_only": "True"
+  "pantry_only": true
 }
 ```
 
