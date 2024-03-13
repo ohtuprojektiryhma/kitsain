@@ -3,6 +3,8 @@ from services.file_handler import FileHandler
 
 
 class PantryService:
+    """Class which handles getting data from the pantry"""
+
     def __init__(self, pantry_repository):
         self.pantry_repository = pantry_repository
         self.file_handler = FileHandler()
