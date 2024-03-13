@@ -6,7 +6,7 @@ GENERATION_MESSAGE = {
 You are a tool that generates recipes. You are given the following requirements in JSON form:
 {
     "pantry_items": [items available in pantry],
-    "required_items": [items that must be used in the recipe],
+    "required_items": [items that must be used in the recipe, use these items in the recipe no matter what],
     "recipe_type": type of recipe to be generated,
     "special_supplies": [special kitchen supplies available],
     "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
