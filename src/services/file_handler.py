@@ -3,7 +3,7 @@ import json
 
 
 class FileHandler:
-    
+
     def read_from_csv(self, filename):
         rows = []
         with open(filename, "a+", newline="", encoding="utf-8") as csvfile:
@@ -38,10 +38,11 @@ class FileHandler:
         recipe_list = []
         with open("recipes.txt", "a+", encoding="utf-8") as f:
             f.seek(0)
-            for jsonObj in f:
-                recipeDict = json.loads(jsonObj)
-                recipeDict["ingredients"] = list(recipeDict["ingredients"].items())
-                recipe_list.append(recipeDict)
+            for json_obj in f:
+                recipe_dict = json.loads(json_obj)
+                recipe_dict["ingredients"] = list(
+                    recipe_dict["ingredients"].items())
+                recipe_list.append(recipe_dict)
         return recipe_list
 
     def read_json_objects_mock_recipe(self):

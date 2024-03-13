@@ -1,7 +1,7 @@
-from api_connection import API_Connection
+from api_connection import APIConnection
 
 ingredients = []
-api_connection = API_Connection()
+api_connection = APIConnection()
 
 
 while True:

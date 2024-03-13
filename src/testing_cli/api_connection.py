@@ -1,7 +1,7 @@
 import requests
 
 
-class API_Connection:
+class APIConnection:
     def __init__(self):
         self.base_url = "http://127.0.0.1:5000"
 
