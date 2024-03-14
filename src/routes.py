@@ -19,6 +19,7 @@ SECONDS_IN_MINUTE = 60
 
 
 # pylint: disable=inconsistent-return-statements
+@app.before_request
 def before_request():
     if request.endpoint != "mock_generate":
         _check_rate_limit()
