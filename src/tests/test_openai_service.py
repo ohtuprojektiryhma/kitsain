@@ -22,16 +22,20 @@ class TestOpenAIService(TestCase):
             "instructions": ["Boil water", "Add salt"],
         }
 
-    """ def test_change_recipe(self):
-        # Call recipe generation method
-        self.service.get_recipe(["Water", "Salt"], "Soup", [], ["Spoon"], False)
-
-        # We want to add pepper to the recipe, so we call the recipe change method
-        result = self.service.change_recipe("Add pepper")
+    def test_change_recipe(self):
+        # Call the recipe change method
+        result = self.service.change_recipe(
+            {
+                "recipe_name": "Mock Soup",
+                "ingredients": {"Water": "1 cup", "Salt": "1 tsp"},
+                "instructions": ["Boil water", "Add salt"],
+            },
+            "Add pepper",
+        )
 
         # Validate that the recipe was changed
         assert result == {
             "recipe_name": "Improved Mock Soup",
             "ingredients": {"Water": "1 cup", "Salt": "1 tsp", "Pepper": "1 tsp"},
             "instructions": ["Boil water", "Add salt", "Add pepper"],
-        } """
+        }
