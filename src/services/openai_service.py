@@ -142,6 +142,10 @@ Change: {change}
         )
 
         response = self._send_messages_to_gpt()
-        print(response)
 
-        return json.loads(response.content)
+        try:
+            return json.loads(response.content)
+        except json.JSONDecodeError as err:
+            print("Error parsing JSON response from GPT. Response:")
+            print(response.content)
+            raise err
