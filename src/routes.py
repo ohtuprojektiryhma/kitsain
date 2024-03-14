@@ -95,18 +95,14 @@ def change():
     which has different
 
     Returns:
-        _type_: _description_
+        JSON object: the recipe changed by Chat GPT
     """
     request_body = request.json
-    recipe = openai_service.change_recipe(
-        request_body["details"],
+    new_recipe = openai_service.change_recipe(
+        request_body["recipe"],
         request_body["change"],
-        # request_body["ingredients"],
-        # request_body["recipe_type"],
-        # request_body["exp_soon"],
-        # request_body["supplies"],
     )
-    return recipe
+    return new_recipe
 
 
 @app.route("/frontend", methods=["GET"])

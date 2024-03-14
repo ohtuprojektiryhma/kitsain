@@ -44,7 +44,16 @@ Generate a recipe and respond only precisely in the following JSON format:
 }
 CHANGE_MESSAGE = {
     "role": "system",
-    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
+    "content": """
+You are a tool that makes changes to recipes. You are given a recipe in the following JSON format:
+{
+    "recipe_name": name of the generated recipe,
+    "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
+    "instructions": [list of instructions on how to make the recipe]
+}
+You are also given a textual description on how the recipe needs to be changed.
+Your task is to change the recipe and return the changed recipe in the same JSON format as the original.
+""",
 }
 
 
@@ -112,24 +121,21 @@ class OpenAIService:
 
     def change_recipe(
         self,
-        details,
+        recipe: dict,
         change: str,
-        # ingredients: list,
-        # recipe_type: str,
-        # exp_soon: list,
-        # supplies: list,
-    ):  # pylint: disable=C0301
+    ):
         # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
-        # then we a message where details = details of recipe we want to change
+        # then we a message where recipe = recipe we want to change
         # and change = the change we want to the recipe
         self.messages.clear()
-        print(details)
-        print(change)
         self.messages.append(CHANGE_MESSAGE)
         self.messages.append(
             {
                 "role": "user",
-                "content": f"""{{"details": {json.dumps(details)}, "change": {json.dumps(change)}}}""",
+                "content": f"""
+{json.dumps(recipe)}
+Change: {change}
+""",
             }
         )
 
