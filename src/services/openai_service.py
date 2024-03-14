@@ -79,13 +79,13 @@ class OpenAIService:
 
     def get_recipe(
         self,
-        ingredients: list[str],
-        recipe_type: str,
-        expiring_soon: list[str],
-        supplies: list[str],
+        required_items: list[str],
+        pantry: list[str],
         pantry_only: bool,
+        recipe_type: str,
+        special_supplies: list[str],
         language: str,
-    ):
+    ) -> dict:
         # First send instructions in GENERATION_MESSAGE, then user input in a second message.
         # Use different GENERATION_MESSAGE depending on if pantry_only is selected.
         messages = []
@@ -99,10 +99,10 @@ class OpenAIService:
                 "role": "user",
                 # This is a string literal, the indentation is wrong on purpose
                 "content": f"""
-Required items: {json.dumps(expiring_soon)},
-Pantry items: {json.dumps(ingredients)},
+Required items: {json.dumps(required_items)},
+Pantry items: {json.dumps(pantry)},
 Recipe type: {json.dumps(recipe_type)},
-Special supplies: {json.dumps(supplies)},
+Special supplies: {json.dumps(special_supplies)},
 Language: {json.dumps(language)}
 """,
             }
@@ -121,7 +121,7 @@ Language: {json.dumps(language)}
         self,
         recipe: dict,
         change: str,
-    ):
+    ) -> dict:
         # First send instructions in CHANGE_MESSAGE, then user input in a second message
         messages = []
         messages.append(CHANGE_MESSAGE)

@@ -22,7 +22,7 @@ class TestApp(TestCase):
     # Inject mock OpenAI object into the service class.
     @patch("app.openai_service.client", OpenAI(api_key="mock api key"))
     def test_generate_recipe(self):
-        data = {"ingredients": ["Water", "Salt"], "recipe_type": "Soup"}
+        data = {"pantry": ["Water", "Salt"], "recipe_type": "Soup"}
 
         response = self.client.post("/generate", json=data)
 
