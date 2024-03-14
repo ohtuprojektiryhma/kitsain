@@ -54,7 +54,8 @@ def generate():
     which has different values to be used in recipe generation:
     exp_soon(list): list of must have items in the recipe
     supplies(list): list of kitchen supplies available for use in the recipe
-    pantry_only(bool): boolean value whether the recipe only uses items from the pantry or adds new ingredients
+    pantry_only(bool): boolean value whether the recipe only uses items from
+                        the pantry or adds new ingredients
     language(string): value in which the recipe is generated in
 
     Returns:
