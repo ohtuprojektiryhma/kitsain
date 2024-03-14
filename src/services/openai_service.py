@@ -1,26 +1,47 @@
 import json
 
-GENERATION_MESSAGE = {
+GENERATION_MESSAGE_PO = {
     "role": "system",
     "content": """
-You are a tool that generates recipes. You are given the following requirements in JSON form:
-{
-    "pantry_items": [items available in pantry],
-    "required_items": [items that must be used in the recipe, use these items in the recipe no matter what],
-    "recipe_type": type of recipe to be generated,
-    "special_supplies": [special kitchen supplies available],
-    "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
-    "language": language of the generated recipe
-}
-Generate a recipe precisely in the following JSON format:
+You are a tool that generates recipes in a precise JSON format. 
+You are given the following information to form the recipe:
+Required items: items that must be used in the recipe, use these items in the recipe no matter what.
+Pantry items: items available in the users pantry, these can be used in the recipe if needed.
+Do not use any other extra ingredients in the recipe.
+Recipe type: type of recipe to be generated,
+Special supplies : special kitchen supplies that could be used to make the recipe.
+Language : language that the recipe should be generated in.
+
+Generate a recipe and respond only precisely in the following JSON format:
 {
     "recipe_name": name of the generated recipe,
-    "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
-    "instructions": [list of instructions on how to make the recipe]
+    "ingredients": {dict where key = ingredient name, and value = 
+    amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.)},
+    "instructions": [numbered list of instructions on how to make the recipe]
 }
 """,
 }
+GENERATION_MESSAGE_NPO = {
+    "role": "system",
+    "content": """
+You are a tool that generates recipes in a precise JSON format. 
+You are given the following information to form the recipe:
+Required items: items that must be used in the recipe, use these items in the recipe no matter what.
+Pantry items: items available in the users pantry, these can be used in the recipe if needed.
+You can also use other extra ingredients in the recipe also, if needed.
+Recipe type: type of recipe to be generated,
+Special supplies : special kitchen supplies that could be used to make the recipe.
+Language : language that the recipe should be generated in.
 
+Generate a recipe and respond only precisely in the following JSON format:
+{
+    "recipe_name": name of the generated recipe,
+    "ingredients": {dict where key = ingredient name, and value = 
+    amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.)},
+    "instructions": [numbered list of instructions on how to make the recipe]
+}
+""",
+}
 CHANGE_MESSAGE = {
     "role": "system",
     "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
@@ -36,14 +57,19 @@ class OpenAIService:
     def _send_messages_to_gpt(self):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-0125",
+            response_format={"type": "json_object"},
             messages=self.messages,
         )
-        response = completion.choices[0].message
+        if completion.choices[0].finish_reason == "stop":
+            response = completion.choices[0].message
 
-        # add response to chat session and return it
-        self.messages.append(response)
-        return response
+            # add response to chat session and return it
+            self.messages.append(response)
+            return response
+        return {
+            "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
+        }
 
     def get_recipe(
         self,
@@ -56,23 +82,25 @@ class OpenAIService:
     ):
         # init chat session
         self.messages.clear()
-        self.messages.append(GENERATION_MESSAGE)
+        if pantry_only:
+            self.messages.append(GENERATION_MESSAGE_PO)
+        else:
+            self.messages.append(GENERATION_MESSAGE_NPO)
+
         self.messages.append(
             {
                 "role": "user",
                 "content": f"""
-{{
-    "pantry_items": {json.dumps(ingredients)},
-    "required_items": {json.dumps(expiring_soon)},
-    "recipe_type": {json.dumps(recipe_type)},
-    "special_supplies": {json.dumps(supplies)},
-    "pantry_only": {json.dumps(pantry_only)},
-    "language": {json.dumps(language)}
-}}
-""",
+        {{
+            "required_items": {json.dumps(expiring_soon)},
+            "pantry_items": {json.dumps(ingredients)},
+            "recipe_type": {json.dumps(recipe_type)},
+            "special_supplies": {json.dumps(supplies)},
+            "language": {json.dumps(language)}
+        }}
+        """,
             }
         )
-
         response = self._send_messages_to_gpt()
 
         try:
