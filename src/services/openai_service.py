@@ -62,25 +62,20 @@ Your task is to change the recipe and return the changed recipe in the same JSON
 class OpenAIService:
     def __init__(self, client):
         self.client = client
-        # current chat session
-        self.messages = []
 
-    def _send_messages_to_gpt(self):
+    def _send_messages_to_gpt(self, messages):
         # call openai api
         completion = self.client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             response_format={"type": "json_object"},
-            messages=self.messages,
+            messages=messages,
         )
         if completion.choices[0].finish_reason == "stop":
-            response = completion.choices[0].message
-
-            # add response to chat session and return it
-            self.messages.append(response)
-            return response
-        return {
-            "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
-        }
+            return completion.choices[0].message
+        else:
+            return {
+                "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
+            }
 
     def get_recipe(
         self,
@@ -91,16 +86,18 @@ class OpenAIService:
         pantry_only: bool,
         language: str,
     ):
-        # init chat session
-        self.messages.clear()
+        # First send instructions in GENERATION_MESSAGE, then user input in a second message.
+        # Use different GENERATION_MESSAGE depending on if pantry_only is selected.
+        messages = []
         if pantry_only:
-            self.messages.append(GENERATION_MESSAGE_PO)
+            messages.append(GENERATION_MESSAGE_PO)
         else:
-            self.messages.append(GENERATION_MESSAGE_NPO)
+            messages.append(GENERATION_MESSAGE_NPO)
 
-        self.messages.append(
+        messages.append(
             {
                 "role": "user",
+                # This is a string literal, the indentation is wrong on purpose
                 "content": f"""
 {{
     "required_items": {json.dumps(expiring_soon)},
@@ -109,10 +106,11 @@ class OpenAIService:
     "special_supplies": {json.dumps(supplies)},
     "language": {json.dumps(language)}
 }}
-        """,
+""",
             }
         )
-        response = self._send_messages_to_gpt()
+
+        response = self._send_messages_to_gpt(messages)
 
         try:
             return json.loads(response.content)
@@ -126,14 +124,13 @@ class OpenAIService:
         recipe: dict,
         change: str,
     ):
-        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
-        # then we a message where recipe = recipe we want to change
-        # and change = the change we want to the recipe
-        self.messages.clear()
-        self.messages.append(CHANGE_MESSAGE)
-        self.messages.append(
+        # First send instructions in CHANGE_MESSAGE, then user input in a second message
+        messages = []
+        messages.append(CHANGE_MESSAGE)
+        messages.append(
             {
                 "role": "user",
+                # This is a string literal, the indentation is wrong on purpose
                 "content": f"""
 {json.dumps(recipe)}
 Change: {change}
@@ -141,7 +138,7 @@ Change: {change}
             }
         )
 
-        response = self._send_messages_to_gpt()
+        response = self._send_messages_to_gpt(messages)
 
         try:
             return json.loads(response.content)
