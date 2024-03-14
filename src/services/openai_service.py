@@ -9,7 +9,7 @@ You are given the following information to form the recipe:
 Required items: items that must be used in the recipe, use these items in the recipe no matter what.
 Pantry items: items available in the users pantry, these can be used in the recipe if needed.
 You must not use any other extra ingredients in the recipe, even if the recipe would not make sense.
-Recipe type: type of recipe to be generated,
+Recipe type: type of recipe to be generated.
 Special supplies: special kitchen supplies that could be used to make the recipe.
 Language: language that the recipe should be generated in.
 
@@ -31,7 +31,7 @@ You are given the following information to form the recipe:
 Required items: items that must be used in the recipe, use these items in the recipe no matter what.
 Pantry items: items available in the users pantry, these can be used in the recipe if needed.
 You can also use other extra ingredients in the recipe, if needed.
-Recipe type: type of recipe to be generated,
+Recipe type: type of recipe to be generated.
 Special supplies: special kitchen supplies that could be used to make the recipe.
 Language: language that the recipe should be generated in.
 
@@ -99,13 +99,11 @@ class OpenAIService:
                 "role": "user",
                 # This is a string literal, the indentation is wrong on purpose
                 "content": f"""
-{{
-    "required_items": {json.dumps(expiring_soon)},
-    "pantry_items": {json.dumps(ingredients)},
-    "recipe_type": {json.dumps(recipe_type)},
-    "special_supplies": {json.dumps(supplies)},
-    "language": {json.dumps(language)}
-}}
+Required items: {json.dumps(expiring_soon)},
+Pantry items: {json.dumps(ingredients)},
+Recipe type: {json.dumps(recipe_type)},
+Special supplies: {json.dumps(supplies)},
+Language: {json.dumps(language)}
 """,
             }
         )
