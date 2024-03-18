@@ -71,11 +71,10 @@ class OpenAIService:
             messages=messages,
         )
         if completion.choices[0].finish_reason == "stop":
-            return completion.choices[0].message
-        else:
-            return {
-                "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
-            }
+            return completion.choices[0].messag
+        return {
+            "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
+        }
 
     def get_recipe(
         self,
