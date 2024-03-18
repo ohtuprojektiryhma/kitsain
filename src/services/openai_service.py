@@ -71,7 +71,7 @@ class OpenAIService:
             messages=messages,
         )
         if completion.choices[0].finish_reason == "stop":
-            return completion.choices[0].messag
+            return completion.choices[0].message
         return {
             "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
         }

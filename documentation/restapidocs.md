@@ -57,7 +57,7 @@ Response
 
 ## POST /change
 
-Changes a previously generated recipe.
+Changes a given recipe.
 
 **Request body:** JSON object with fields:
 
