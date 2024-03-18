@@ -1,6 +1,6 @@
 import json
 
-GENERATION_MESSAGE_PO = {
+GENERATION_MESSAGE_PO_FULL = {
     "role": "system",
     "content": """
 You are a tool that generates recipes in a precise JSON format.
@@ -22,7 +22,7 @@ Generate a recipe and respond only precisely in the following JSON format:
 }
 """,
 }
-GENERATION_MESSAGE_NPO = {
+GENERATION_MESSAGE_NPO_FULL = {
     "role": "system",
     "content": """
 You are a tool that generates recipes in a precise JSON format.
@@ -70,11 +70,58 @@ class OpenAIService:
             response_format={"type": "json_object"},
             messages=messages,
         )
-        if completion.choices[0].finish_reason == "stop":
-            return completion.choices[0].message
-        return {
-            "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
-        }
+        if completion.choices[0].finish_reason != "stop":
+            return {
+                "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
+            }
+        return completion.choices[0].message
+
+    def _form_genaration_message(
+        self,
+        required_items: list[str],
+        pantry: list[str],
+        pantry_only: bool,
+        recipe_type: str,
+        special_supplies: list[str],
+    ) -> dict:
+        generation_message_content = """
+You are a tool that generates recipes in a precise JSON format.
+
+You are given the following information to form the recipe:
+"""
+        if len(required_items) != 0:
+            generation_message_content += """
+Required items: items that must be used in the recipe, use these items in the recipe no matter what.
+"""
+        if len(pantry) != 0:
+            generation_message_content += """
+Pantry items: items available in the users pantry, these can be used in the recipe if needed.
+"""
+        if pantry_only:
+            generation_message_content += """
+You must not use any other extra ingredients in the recipe, even if the recipe would not make sense.
+"""
+        else:
+            generation_message_content += """
+You can also use other extra ingredients in the recipe, if needed.
+"""
+        if len(recipe_type) != 0:
+            generation_message_content += """
+Recipe type: type of recipe to be generated.
+"""
+        if len(special_supplies) != 0:
+            generation_message_content += """
+Special supplies: special kitchen supplies that could be used to make the recipe.
+"""
+        generation_message_content += """
+Language: language that the recipe should be generated in.
+Generate a recipe and respond only precisely in the following JSON format:
+{"recipe_name": "name of the generated recipe",
+"ingredients": {dict where key = ingredient name, and value = amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.)},
+"instructions": [numbered list of instructions on how to make the recipe]}
+"""
+        generation_message = {"role": "system", "content": generation_message_content}
+        return generation_message
 
     def get_recipe(
         self,
@@ -88,11 +135,11 @@ class OpenAIService:
         # First send instructions in GENERATION_MESSAGE, then user input in a second message.
         # Use different GENERATION_MESSAGE depending on if pantry_only is selected.
         messages = []
-        if pantry_only:
-            messages.append(GENERATION_MESSAGE_PO)
-        else:
-            messages.append(GENERATION_MESSAGE_NPO)
-
+        generation_message = self._form_genaration_message(
+            required_items, pantry, pantry_only, recipe_type, special_supplies
+        )
+        messages.append(generation_message)
+        print(generation_message)
         messages.append(
             {
                 "role": "user",
