@@ -1,4 +1,5 @@
 from os import getenv, path
+from collections import deque
 from dotenv import load_dotenv
 from unittest import TestCase
 from unittest.mock import patch
@@ -63,3 +64,16 @@ class TestApp(TestCase):
                 "instructions": ["Boil water", "Add salt", "Add pepper"],
             },
         )
+
+    # Patching REQUEST_QUEUE to be empty before this test
+    @patch("routes.REQUEST_QUEUE", deque())
+    def test_rate_limit(self):
+
+        # First 500 requests should return success
+        for _ in range(0, 500):
+            response = self.client.post("/test_route")
+            self.assertEqual(response.status_code, 204)
+
+        # Request 501 should return trigger the rate limiter
+        response = self.client.post("/test_route")
+        self.assertEqual(response.status_code, 429)

@@ -1,7 +1,7 @@
 import json
 import time
 from collections import deque
-from flask import request, render_template, jsonify
+from flask import request, render_template
 from app import app, openai_service
 from repositories.pantry_repository import PantryRepository
 from services.pantry_service import PantryService
@@ -13,15 +13,16 @@ pantry_repository = PantryRepository(db)
 pantry_service = PantryService(pantry_repository)
 
 MAX_REQUESTS_PER_TIME_FRAME = 500
-REQUEST_QUEUE = deque(maxlen=MAX_REQUESTS_PER_TIME_FRAME)
+REQUEST_QUEUE = deque()
 SECONDS_IN_HOUR = 3600
 SECONDS_IN_MINUTE = 60
 
 
 # pylint: disable=inconsistent-return-statements
+@app.before_request
 def before_request():
     if request.endpoint != "mock_generate":
-        _check_rate_limit()
+        return _check_rate_limit()
 
 
 def _check_rate_limit():
@@ -31,8 +32,15 @@ def _check_rate_limit():
         REQUEST_QUEUE.popleft()
 
     if len(REQUEST_QUEUE) >= MAX_REQUESTS_PER_TIME_FRAME:
-        return jsonify({"error": "Rate limit exceeded"}), 429
+        return ("", 429)
     REQUEST_QUEUE.append(current_time)
+
+
+# This route does nothing on purpose. It is used to test rate limiting.
+@app.route("/test_route", methods=["POST"])
+def test_route():
+    # HTTP 204 No Content
+    return ("", 204)
 
 
 @app.route("/mock_generate", methods=["POST"])
