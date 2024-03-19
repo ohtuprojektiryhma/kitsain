@@ -7,7 +7,7 @@ def create(model: str, response_format: dict, messages: list):
     response.choices[0].finish_reason = "stop"
 
     # We are generating new recipe
-    if "You are a tool that generates recipes" in messages[0]["content"]:
+    if "You are a tool that generates appealing and tasty recipes in a precise JSON format" in messages[0]["content"]:
         response.choices[0].message.content = json.dumps(
             {
                 "recipe_name": "Mock Soup",
