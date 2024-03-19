@@ -10,7 +10,7 @@ You are a tool that makes changes to recipes. You are given a recipe in the foll
     "instructions": [list of instructions on how to make the recipe]
 }
 You are also given a textual description on how the recipe needs to be changed.
-Your task is to change the recipe and return the changed recipe in the same JSON format as the original.
+Your task is to change the recipe and return the changed recipe in the same JSON format as the original recipe.
 """,
 }
 
@@ -26,7 +26,9 @@ class OpenAIService:
             response_format={"type": "json_object"},
             messages=messages,
         )
+        print(completion.usage)
         if completion.choices[0].finish_reason != "stop":
+
             return {
                 "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
             }
@@ -44,25 +46,25 @@ class OpenAIService:
         # according to the content of the sent request
         # This is a string literal, the indentation is wrong on purpose
         generation_message_content = """
-You are a tool that generates recipes in a precise JSON format.
+You are a tool that generates appealing and tasty recipes in a precise JSON format.
 
 You are given the following information to form the recipe:
 """
         if len(required_items) != 0:
             generation_message_content += """
-Required items: items that must be used in the recipe, use these items in the recipe no matter what.
+Required items: items that MUST be used in the recipe, use these items in the recipe no matter what.
 """
         if len(pantry) != 0:
             generation_message_content += """
-Pantry items: items available in the users pantry, these can be used in the recipe if needed.
+Pantry items: items that are available to use in the recipe. There is no need to use these if it does not make sense. 
 """
         if pantry_only:
             generation_message_content += """
-You must not use any other extra ingredients in the recipe, even if the recipe would not make sense.
+You must not use any other extra ingredients in addition to the ones already listed. Even if the recipe would not make sense.
 """
         else:
             generation_message_content += """
-You can also use other extra ingredients in the recipe, if needed.
+You can also use other extra ingredients apart from the ones already listed, in the recipe, if needed.
 """
         if len(recipe_type) != 0:
             generation_message_content += """
@@ -70,14 +72,14 @@ Recipe type: type of recipe to be generated.
 """
         if len(special_supplies) != 0:
             generation_message_content += """
-Special supplies: special kitchen supplies that could be used to make the recipe.
+Special supplies: kitchen supplies that could be used to make the recipe. These are optional but if needed, make sure to use them in a logical way. If you make estimates of how long you use the supply, make it logical.
 """
         generation_message_content += """
-Language: language that the recipe should be generated in.
+Language: language that the recipe should be generated in. Please make sure to generate the recipe in this language.
 Generate a recipe and respond only precisely in the following JSON format:
-{"recipe_name": "name of the generated recipe",
-"ingredients": {dict where key = ingredient name, and value = amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.)},
-"instructions": [numbered list of instructions on how to make the recipe]}
+{"recipe_name": "logical name of the generated recipe",
+"ingredients": {dict where key = ingredient name, and value = amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.), here list ALL the ingredients you use in your recipe},
+"instructions": [a numbered list of instructions on how to make the recipe, Number the steps with numbers eg. 1., 2. 3.]}
 """
         generation_message = {"role": "system", "content": generation_message_content}
         return generation_message
