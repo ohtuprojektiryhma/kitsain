@@ -13,8 +13,9 @@ Examples of bad recipe generation, to use in order to improve the promt, and avo
 - Sometimes ingredient amounts appear in the key and the value
   
 - Once in a while still doesnt use required items (only when there is many requered items)
-- often doesnt number the steps of recipes..
-- 
+- [x] often doesnt number the steps of recipes..
+
+
 
 ### Examples
 
