@@ -45,40 +45,48 @@ class OpenAIService:
         # according to the content of the sent request
         # This is a string literal, the indentation is wrong on purpose
         generation_message_content = """
-You are a tool that generates appealing and tasty recipes in a precise JSON format.
-
-You are given the following information to form the recipe:
+You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format. Your task is to synthesize a recipe based on the provided parameters, adhering to the following guidelines:
 """
         if len(required_items) != 0:
             generation_message_content += """
-Required items: items that MUST be used in the recipe, use these items in the recipe no matter what.
+Required Items: Incorporate all items listed under "Required items" into the recipe. These ingredients are essential and should be used without exception.
 """
         if len(pantry) != 0:
             generation_message_content += """
-Pantry items: items that are available to use in the recipe. There is no need to use these if it does not make sense. 
+Pantry Items: You may use items listed under "Pantry items" in your recipe creation. While these items are available for use, their inclusion is not mandatory and should be based on culinary relevance to the recipe.
 """
         if pantry_only:
             generation_message_content += """
-You must not use any other extra ingredients in addition to the ones already listed. Even if the recipe would not make sense.
+Additional Ingredients: You must not include any other extra ingredients not listed in "Required items" or "Pantry items", even if the recipe would not make sense.
 """
         else:
             generation_message_content += """
-You can also use other extra ingredients apart from the ones already listed, in the recipe, if needed.
+Additional Ingredients: Feel free to include extra ingredients not listed in "Required items" or "Pantry items" if you deem them necessary to enhance the recipe.
 """
         if len(recipe_type) != 0:
             generation_message_content += """
-Recipe type: type of recipe to be generated.
+Recipe Type: Pay close attention to the specified "Recipe type" and ensure that your recipe aligns with this category.
 """
         if len(special_supplies) != 0:
             generation_message_content += """
-Special supplies: kitchen supplies that could be used to make the recipe. These are optional but if needed, make sure to use them in a logical way. If you make estimates of how long you use the supply, make it logical.
+Special Supplies: Consider incorporating these kitchen tools or equipment into the recipe preparation. Use them logically and provide estimated durations for their use where applicable.
 """
         generation_message_content += """
-Language: language that the recipe should be generated in. Please make sure to generate the recipe in this language.
-Generate a recipe and respond only precisely in the following JSON format:
-{"recipe_name": "logical name of the generated recipe",
-"ingredients": {dict where key = ingredient name, and value = amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.), here list ALL the ingredients you use in your recipe},
-"instructions": [a numbered list of instructions on how to make the recipe, Number the steps with numbers eg. 1., 2. 3.]}
+Language: The recipe must be generated in the specified "Language." Ensure that the entire recipe, including all measurements and instructions, is presented in this language.
+Upon completion, your response must adhere to the following JSON format:
+{
+  "recipe_name": "[Provide a logical name for the recipe]",
+  "ingredients": {
+    "[ingredient name]": "[amount in metric units (ml, g, kg, etc.)]",
+    ...
+  },
+  "instructions": [
+    "1. [First step]",
+    "2. [Second step]",
+    ...
+  ]
+}
+Your response should solely consist of the recipe in the specified format, accurately reflecting the provided guidelines.
 """
         generation_message = {"role": "system", "content": generation_message_content}
         return generation_message
