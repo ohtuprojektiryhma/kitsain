@@ -55,7 +55,7 @@ Required items: items that MUST be used in the recipe, use these items in the re
 """
         if len(pantry) != 0:
             generation_message_content += """
-Pantry items: items that are available to use in the recipe. There is no need to use these if it does not make sense. 
+Pantry items: items that are available to use in the recipe. There is no need to use these if it does not make sense. Only add these to the recipe if they bring value such as make the recipe more delicious.
 """
         if pantry_only:
             generation_message_content += """
@@ -76,7 +76,7 @@ Special supplies: kitchen supplies that could be used to make the recipe. These 
         generation_message_content += """
 Language: language that the recipe should be generated in. Please make sure to generate the recipe in this language.
 Generate a recipe and respond only precisely in the following JSON format:
-{"recipe_name": "logical name of the generated recipe",
+{"recipe_name": "name of the generated recipe. the name should make sense and describe the recipe.",
 "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe in metric system, with the unit included (ml, g, kg, etc.), here list ALL the ingredients you use in your recipe},
 "instructions": [a numbered list of instructions on how to make the recipe, Number the steps with numbers eg. 1., 2. 3.]}
 """
