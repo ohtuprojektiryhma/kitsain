@@ -60,7 +60,7 @@ def generate():
     try:
         required_items = request_body["required_items"]
     except:
-        required_items = []
+        required_items = {}
     try:
         pantry_only = request_body["pantry_only"]
     except:
@@ -73,6 +73,10 @@ def generate():
         language = request_body["language"]
     except:
         language = "english"
+    try:
+        options = int(request_body["options"])
+    except:
+        options = 1
     recipe = openai_service.get_recipe(
         required_items,
         request_body["pantry"],
@@ -80,6 +84,7 @@ def generate():
         request_body["recipe_type"],
         special_supplies,
         language,
+        options,
     )
     return recipe
 

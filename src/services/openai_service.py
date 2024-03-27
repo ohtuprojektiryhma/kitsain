@@ -40,6 +40,7 @@ class OpenAIService:
         pantry_only: bool,
         recipe_type: str,
         special_supplies: list[str],
+        options: int,
     ) -> dict:
         # Internal function that constructs the generation message
         # according to the content of the sent request
@@ -73,18 +74,66 @@ Special Supplies: Consider incorporating these kitchen tools or equipment into t
 """
         generation_message_content += """
 Language: The recipe must be generated in the specified "Language." Ensure that the entire recipe, including all measurements and instructions, is presented in this language.
+"""
+        if options > 1:
+            generation_message_content += """
 Upon completion, your response must adhere to the following JSON format:
 {
-  "recipe_name": "[Provide a logical name for the recipe]",
-  "ingredients": {
-    "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
-    ...
-  },
-  "instructions": [
-    "1. [First step]",
-    "2. [Second step]",
-    ...
-  ]
+  "recipes" : 
+    [
+        {
+        "recipe_name": "[Provide a logical name for the recipe 1]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+            },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+            ]
+        },
+            ...,
+        {
+        "recipe_name": "[Provide a logical name for the recipe n]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+            },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+            ]
+        }
+    ]
+}
+"""
+            generation_message_content += f"Make {options} "
+            generation_message_content += """different types of recipes with these guidelines,
+all of which need to use all of the Required items! Make the recipes different, but assume that the user is only going to make one,
+meaning all the recipes have the same Required items, and Pantry items available.
+Your response should solely consist of the recipes in the specified format, accurately reflecting the provided guidelines.
+"""
+        else:
+            generation_message_content += """
+Upon completion, your response must adhere to the following JSON format:
+{
+  "recipes" : 
+    [
+        {
+            "recipe_name": "[Provide a logical name for the recipe]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+        },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+        ]
+        }
+    ]
 }
 Your response should solely consist of the recipe in the specified format, accurately reflecting the provided guidelines.
 """
@@ -99,12 +148,13 @@ Your response should solely consist of the recipe in the specified format, accur
         recipe_type: str,
         special_supplies: list[str],
         language: str,
+        options: int = 1,
     ) -> dict:
         # First send instructions from __form_generation_message internal function,
         # then user input in a second message.
         messages = []
         generation_message = self.__form_generation_message(
-            required_items, pantry, pantry_only, recipe_type, special_supplies
+            required_items, pantry, pantry_only, recipe_type, special_supplies, options
         )
         messages.append(generation_message)
         print(generation_message)
