@@ -6,12 +6,12 @@ Generates a new recipe from given ingredients and conditions.
 
 **Request body:** JSON object with fields:
 
--   pantry: JSON array of ingredients as strings. These ingredients can be used for the recipe.
+-   pantry: JSON object, that has the name of the item as the key and amount of the item as the value. These items can be used for the recipe.
 -   recipe_type: String of conditions that the recipe must fulfill.
 
 Optional fields in the request body:
 
--   required_items: JSON array of ingredients that must be used in the generated recipe. Defaults to `[]`.
+-   required_items: JSON object, that has the name of the item as the key and amount of the item as the value, that must be used in the generated recipe. Defaults to `{}`.
 -   pantry_only: Boolean that informs whether only pantry items should be used in the generated recipe, defaults to `false`
 -   special_supplies: JSON array of special kitchen supplies that can be used in the generated recipe, defaults to `[]`.
 -   language: String, the language of the generated recipe.
@@ -28,8 +28,8 @@ Request
 
 ```json
 {
-    "required_items": ["milk"],
-    "pantry": ["banana"],
+    "required_items": {"milk" : "2 cups"},
+    "pantry": {"banana" : "2"},
     "pantry_only": true,
     "recipe_type": "sweet",
     "special_supplies": ["blender"],

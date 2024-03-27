@@ -35,8 +35,8 @@ class OpenAIService:
 
     def __form_generation_message(
         self,
-        required_items: list[str],
-        pantry: list[str],
+        required_items: dict,
+        pantry: dict,
         pantry_only: bool,
         recipe_type: str,
         special_supplies: list[str],
@@ -49,11 +49,11 @@ You are an advanced tool designed to create unique, appealing, and tasty recipes
 """
         if len(required_items) != 0:
             generation_message_content += """
-Required Items: Incorporate all items listed under "Required items" into the recipe. These ingredients are essential and should be used without exception.
+Required Items: Incorporate all items listed under "Required items" into the recipe. These ingredients are essential and should be used without exception. If given an amount for the item, only use as much as the amount says.
 """
         if len(pantry) != 0:
             generation_message_content += """
-Pantry Items: You may use items listed under "Pantry items" in your recipe creation. While these items are available for use, their inclusion is not mandatory and should be based on culinary relevance to the recipe.
+Pantry Items: You may use items listed under "Pantry items" in your recipe creation. While these items are available for use, their inclusion is not mandatory and should be based on culinary relevance to the recipe. If given an amount for the item, only use as much as the amount says, but don't use it all unless it makes sense.
 """
         if pantry_only:
             generation_message_content += """
@@ -77,7 +77,7 @@ Upon completion, your response must adhere to the following JSON format:
 {
   "recipe_name": "[Provide a logical name for the recipe]",
   "ingredients": {
-    "[ingredient name]": "[amount in metric units (ml, g, kg, etc.)]",
+    "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
     ...
   },
   "instructions": [
@@ -93,8 +93,8 @@ Your response should solely consist of the recipe in the specified format, accur
 
     def get_recipe(
         self,
-        required_items: list[str],
-        pantry: list[str],
+        required_items: dict,
+        pantry: dict,
         pantry_only: bool,
         recipe_type: str,
         special_supplies: list[str],
