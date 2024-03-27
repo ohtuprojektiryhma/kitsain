@@ -10,7 +10,7 @@ By University of Helsinki students for [the software engineering project course]
 
 
 ## [Definition of Done:](https://github.com/ohtuprojektiryhma/kitsain/blob/main/documentation/dod.md)
-The requirement has been analyzed (acceptance criteria created), planned (divided into technical tasks), programmed, tested with tests that bring value (with minimum coverage of 80%), testing automated (CI-pipeline), documented (with Readme file) and merged into main production branch.
+The requirement has been analyzed (acceptance criteria created), planned (divided into technical tasks), programmed, tested with tests that bring value, testing automated (CI-pipeline), documented (with Readme file) and merged into main production branch.
 
 ## [Backlog](https://github.com/orgs/ohtuprojektiryhma/projects/1)
 
