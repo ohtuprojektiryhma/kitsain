@@ -1,79 +1,178 @@
 import json
 
-GENERATION_MESSAGE = {
+CHANGE_MESSAGE = {
     "role": "system",
     "content": """
-You are a tool that generates recipes. You are given the following requirements in JSON form:
-{
-    "pantry_items": [items available in pantry],
-    "required_items": [items that must be used in the recipe, use these items in the recipe no matter what],
-    "recipe_type": type of recipe to be generated,
-    "special_supplies": [special kitchen supplies available],
-    "pantry_only": boolean, if true you must not use any extra items not in pantry, even if the recipe would not make sense,
-    "language": language of the generated recipe
-}
-Generate a recipe precisely in the following JSON format:
+You are a tool that makes changes to recipes. You are given a recipe in the following JSON format:
 {
     "recipe_name": name of the generated recipe,
     "ingredients": {dict where key = ingredient name, and value = amount needed for the recipe},
     "instructions": [list of instructions on how to make the recipe]
 }
+You are also given a textual description on how the recipe needs to be changed.
+Your task is to change the recipe and return the changed recipe in the same JSON format as the original recipe.
 """,
-}
-
-CHANGE_MESSAGE = {
-    "role": "system",
-    "content": "You are a tool that makes changes to recipes. You are given a recipe in a json format and wanted changes to the recipe. Generate the same recipe with given changes in a json form. Provide the fields: recipe_name : name of the generated recipe, ingredients : dict where key = ingredient name, and the value = amount needed for the recipe, instructions : list of instructions on how to make the recipe",  # pylint: disable=C0301
 }
 
 
 class OpenAIService:
     def __init__(self, client):
         self.client = client
-        # current chat session
-        self.messages = []
 
-    def _send_messages_to_gpt(self):
+    def _send_messages_to_gpt(self, messages):
         # call openai api
         completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=self.messages,
+            model="gpt-3.5-turbo-0125",
+            response_format={"type": "json_object"},
+            messages=messages,
         )
-        response = completion.choices[0].message
+        print(completion.usage)
+        if completion.choices[0].finish_reason != "stop":
+            return {
+                "error": f"generation failed, reason: {completion.choices[0].finish_reason}"
+            }
+        return completion.choices[0].message
 
-        # add response to chat session and return it
-        self.messages.append(response)
-        return response
+    def __form_generation_message(
+        self,
+        required_items: dict,
+        pantry: dict,
+        pantry_only: bool,
+        recipe_type: str,
+        special_supplies: list[str],
+        options: int,
+    ) -> dict:
+        # Internal function that constructs the generation message
+        # according to the content of the sent request
+        # This is a string literal, the indentation is wrong on purpose
+        generation_message_content = """
+You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format. Your task is to synthesize a recipe based on the provided parameters, adhering to the following guidelines:
+"""
+        if len(required_items) != 0:
+            generation_message_content += """
+Required Items: Incorporate all items listed under "Required items" into the recipe. These ingredients are essential and should be used without exception. If given an amount for the item, only use as much as the amount says.
+"""
+        if len(pantry) != 0:
+            generation_message_content += """
+Pantry Items: You may use items listed under "Pantry items" in your recipe creation. While these items are available for use, their inclusion is not mandatory and should be based on culinary relevance to the recipe. If given an amount for the item, only use as much as the amount says, but don't use it all unless it makes sense.
+"""
+        if pantry_only:
+            generation_message_content += """
+Additional Ingredients: You must not include any other extra ingredients not listed in "Required items" or "Pantry items", even if the recipe would not make sense.
+"""
+        else:
+            generation_message_content += """
+Additional Ingredients: Feel free to include extra ingredients not listed in "Required items" or "Pantry items" if you deem them necessary to enhance the recipe.
+"""
+        if len(recipe_type) != 0:
+            generation_message_content += """
+Recipe Type: Pay close attention to the specified "Recipe type" and ensure that your recipe aligns with this category.
+"""
+        if len(special_supplies) != 0:
+            generation_message_content += """
+Special Supplies: Consider incorporating these kitchen tools or equipment into the recipe preparation. Use them logically and provide estimated durations for their use where applicable.
+"""
+        generation_message_content += """
+Language: The recipe must be generated in the specified "Language." Ensure that the entire recipe, including all measurements and instructions, is presented in this language.
+"""
+        if options > 1:
+            generation_message_content += """
+Upon completion, your response must adhere to the following JSON format:
+{
+  "recipes" : 
+    [
+        {
+        "recipe_name": "[Provide a logical name for the recipe 1]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+            },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+            ]
+        },
+            ...,
+        {
+        "recipe_name": "[Provide a logical name for the recipe n]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+            },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+            ]
+        }
+    ]
+}
+"""
+            generation_message_content += f"Make {options} "
+            generation_message_content += """different types of recipes with these guidelines,
+all of which need to use all of the Required items! Make the recipes different, but assume that the user is only going to make one,
+meaning all the recipes have the same Required items, and Pantry items available.
+Your response should solely consist of the recipes in the specified format, accurately reflecting the provided guidelines.
+"""
+        else:
+            generation_message_content += """
+Upon completion, your response must adhere to the following JSON format:
+{
+  "recipes" : 
+    [
+        {
+            "recipe_name": "[Provide a logical name for the recipe]",
+        "ingredients": {
+            "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
+            ...
+        },
+        "instructions": [
+            "1. [First step]",
+            "2. [Second step]",
+            ...
+        ]
+        }
+    ]
+}
+Your response should solely consist of the recipe in the specified format, accurately reflecting the provided guidelines.
+"""
+        generation_message = {"role": "system", "content": generation_message_content}
+        return generation_message
 
     def get_recipe(
         self,
-        ingredients: list[str],
-        recipe_type: str,
-        expiring_soon: list[str],
-        supplies: list[str],
+        required_items: dict,
+        pantry: dict,
         pantry_only: bool,
+        recipe_type: str,
+        special_supplies: list[str],
         language: str,
-    ):
-        # init chat session
-        self.messages.clear()
-        self.messages.append(GENERATION_MESSAGE)
-        self.messages.append(
+        options: int = 1,
+    ) -> dict:
+        # First send instructions from __form_generation_message internal function,
+        # then user input in a second message.
+        messages = []
+        generation_message = self.__form_generation_message(
+            required_items, pantry, pantry_only, recipe_type, special_supplies, options
+        )
+        messages.append(generation_message)
+        print(generation_message)
+        messages.append(
             {
                 "role": "user",
+                # This is a string literal, the indentation is wrong on purpose
                 "content": f"""
-{{
-    "pantry_items": {json.dumps(ingredients)},
-    "required_items": {json.dumps(expiring_soon)},
-    "recipe_type": {json.dumps(recipe_type)},
-    "special_supplies": {json.dumps(supplies)},
-    "pantry_only": {json.dumps(pantry_only)},
-    "language": {json.dumps(language)}
-}}
+Required items: {json.dumps(required_items)},
+Pantry items: {json.dumps(pantry)},
+Recipe type: {json.dumps(recipe_type)},
+Special supplies: {json.dumps(special_supplies)},
+Language: {json.dumps(language)}
 """,
             }
         )
 
-        response = self._send_messages_to_gpt()
+        response = self._send_messages_to_gpt(messages)
 
         try:
             return json.loads(response.content)
@@ -84,28 +183,28 @@ class OpenAIService:
 
     def change_recipe(
         self,
-        details,
+        recipe: dict,
         change: str,
-        # ingredients: list,
-        # recipe_type: str,
-        # exp_soon: list,
-        # supplies: list,
-    ):  # pylint: disable=C0301
-        # Messages are cleared, then the CHANGE_MESSAGE is sent to the AI,
-        # then we a message where details = details of recipe we want to change
-        # and change = the change we want to the recipe
-        self.messages.clear()
-        print(details)
-        print(change)
-        self.messages.append(CHANGE_MESSAGE)
-        self.messages.append(
+    ) -> dict:
+        # First send instructions in CHANGE_MESSAGE, then user input in a second message
+        messages = []
+        messages.append(CHANGE_MESSAGE)
+        messages.append(
             {
                 "role": "user",
-                "content": f"""{{"details": {json.dumps(details)}, "change": {json.dumps(change)}}}""",
+                # This is a string literal, the indentation is wrong on purpose
+                "content": f"""
+{json.dumps(recipe)}
+Change: {change}
+""",
             }
         )
 
-        response = self._send_messages_to_gpt()
-        print(response)
+        response = self._send_messages_to_gpt(messages)
 
-        return json.loads(response.content)
+        try:
+            return json.loads(response.content)
+        except json.JSONDecodeError as err:
+            print("Error parsing JSON response from GPT. Response:")
+            print(response.content)
+            raise err

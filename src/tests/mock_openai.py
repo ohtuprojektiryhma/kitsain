@@ -2,11 +2,15 @@ import json
 from unittest.mock import MagicMock
 
 
-def create(model: str, messages: list):
+def create(model: str, response_format: dict, messages: list):
     response = MagicMock()
+    response.choices[0].finish_reason = "stop"
 
-    # 2 messages means that we are generating new recipe
-    if len(messages) == 2:
+    # We are generating new recipe
+    if (
+        "You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format"
+        in messages[0]["content"]
+    ):
         response.choices[0].message.content = json.dumps(
             {
                 "recipe_name": "Mock Soup",
@@ -14,7 +18,7 @@ def create(model: str, messages: list):
                 "instructions": ["Boil water", "Add salt"],
             }
         )
-    # more than 2 messages means we are changing a recipe
+    # We are changing a recipe
     else:
         response.choices[0].message.content = json.dumps(
             {
