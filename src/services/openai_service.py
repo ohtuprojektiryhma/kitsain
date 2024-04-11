@@ -48,7 +48,9 @@ class OpenAIService:
         generation_message_content = """
 You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format. Your task is to synthesize a recipe based on the provided parameters, adhering to the following guidelines: (you do not need to use the full amount of ingredient, only use as much as needed for the recipe)
 """
-        generation_message_content += """Good recipes are generally diverse and include most of the macronutrients (eg. proteins, carbohydrates, vitamins, fats), so try to keep this in mind."""
+        generation_message_content += """
+        Good recipes are generally diverse and include most of the macronutrients
+        (eg. proteins, carbohydrates, vitamins, fats), so try to keep this in mind."""
 
         if len(required_items) != 0:
             generation_message_content += """
