@@ -46,7 +46,7 @@ class OpenAIService:
         # according to the content of the sent request
         # This is a string literal, the indentation is wrong on purpose
         generation_message_content = """
-You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format. Your task is to synthesize a recipe based on the provided parameters, adhering to the following guidelines: (you do not need to use the full amount of ingredient, only use as much as needed for the recipe)
+You are an advanced tool designed to create unique, appealing, and tasty recipes in a precise JSON format. Your task is to synthesize a recipe based on the provided parameters, adhering to the following guidelines: (you do not need to use the full amount of ingredient, only use as much as needed for the recipe) Time Estimate: Start the recipe name with an estimate of the total preparation and cooking time, expressed in minutes
 """
         generation_message_content += """
         Good recipes are generally diverse and include most of the macronutrients
@@ -86,7 +86,7 @@ Upon completion, your response must adhere to the following JSON format:
   "recipes" : 
     [
         {
-        "recipe_name": "[Provide a logical name for the recipe 1]",
+        "recipe_name": "[Time estimate in minutes]m - [Provide a logical name for the recipe]",
         "ingredients": {
             "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
             ...
@@ -99,7 +99,7 @@ Upon completion, your response must adhere to the following JSON format:
         },
             ...,
         {
-        "recipe_name": "[Provide a logical name for the recipe n]",
+        "recipe_name": "[Time estimate in minutes]m - [Provide a logical name for the recipe]",
         "ingredients": {
             "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
             ...
@@ -126,7 +126,7 @@ Upon completion, your response must adhere to the following JSON format:
   "recipes" : 
     [
         {
-            "recipe_name": "[Provide a logical name for the recipe]",
+            "recipe_name": "[Time estimate in minutes]m - [Provide a logical name for the recipe]",
         "ingredients": {
             "[ingredient name]": "[amount the ingredient is used in the recipe in metric units (ml, g, kg, etc.)]",
             ...
