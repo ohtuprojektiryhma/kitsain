@@ -6,6 +6,8 @@
 ## About
 This repository is for a backend software that has an API where food ingredients at hand are sent and the software calls OpenAI API to retrieve recipe suggestions for those ingredients. Documentation for API endpoints can be found [here](./documentation/restapidocs.md).
 
+Frontend for the project can be found in [this repository](https://github.com/ohtuprojektiryhma/Kitsain-Frontend-Spring2024).
+
 By University of Helsinki students for [the software engineering project course](https://studies.helsinki.fi/kurssit/toteutus/otm-4dab3f07-4ba7-4ae1-a269-ee1e0817c66c/TKT20007/Ohjelmistoprojekti). 
 
 
